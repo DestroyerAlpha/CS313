@@ -1,0 +1,65 @@
+\title{Assignment 0}
+\author{
+        Brinal Savsaviya, CSE\\
+                180010030\\
+            \and
+        Dhruv Jain, EE\\
+        180020006\\
+        \and
+        Shivam Chaturvedi, CSE\\
+                180010032\\
+}
+\date{\today}
+
+\documentclass[12pt]{article}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In this assignment, we simulate a scenario where an infiltrator from Attacking Country (AC) 
+is trying to cross a border with randomly switched motion sensors. We try to show the relation between width of the border and probability of
+sensor being switched with time taken to cross the border.
+\end{abstract}
+
+\section{Introduction}
+\paragraph{Outline}
+One country, called the defending country (DC),
+wishes to defend its border against another country, called the attacking coun-
+try (AC), whose aim is to send an infiltrator to cross the border and enter DC’s
+land. DC decides to deploy a wireless sensor network along the border. If a sen-
+sor detects an infiltration attempt, DC can then send its troops to counter the
+infiltration with “fire and fury” (Trump style!). Quite obviously, the infiltrator
+would like to enter DC’s land without triggering any sensors.
+\section{Attempt at solution}\label{attempt}
+We create multiple classes to assist with the simulation. \textit{Border} class has two members,
+length and width. Length is fixed at 1000 units whereas we vary width, \textbf{W} was per requirement. \textit{Sensor} class
+has a method which takes a parameter, the probability \textbf{P}, and returns a boolean \texttt{True} if
+the random number generated, \textbf{X} is less than \textbf{P}, else it returns \texttt{False}. The \textit{infiltrator}
+ class has a method which takes care of the motion of the infiltrator. If any 3 of the cells in front of him are empty, we moves forward,
+ else we stays at his current cell. The method returns the sum of the width and the times he had to wait to move forward.
+\textit{Time} class takes care of the time elapsed in this simulated world, and finally \textit{timeRequired}
+ class is the main program which runs two loops for \textbf{P} from 0 to 0.99 \& \textbf{W} from 0 to 1000. It finally calculates
+ the time taken for the infiltrator to cross the border and outputs it on the \textit{System Output}.
+
+\section{Results}\label{results}
+On looking at the data, we see that when we fix the width of the border, the time taken to cross the border looks linear till probability reaches really high values.
+As soon as the probability becomes \(\geq 0.9\), the time taken starts shooting up exponentially.
+\newline
+**Insert graph here**
+\newline
+On the other hand, when we keep probability constant and vary width, the time taken to cross the border,
+grows linearly with the width of the border.
+\newline
+**Insert graph here**
+
+\section{Conclusions}\label{conclusions}
+We can conclude that, when probability of the sensor being switched on becomes very large (\textit{when it is very likely that the sensor is on!}),
+the infiltrator has to wait for a long time to cross even a single unit across the width. Whereas, for 
+smaller probabilities, it is very unlikely that there is no path for the infiltrator to move forward.
+Hence, it varies linerly with width.
+
+\bibliographystyle{abbrv}
+\bibliography{main}
+
+\end{document}
