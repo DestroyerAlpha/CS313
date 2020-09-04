@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=sensor
+comment1.params=x
+comment1.target=boolean\ isOn(java.lang.Double)
+numComments=2
