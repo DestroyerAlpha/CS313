@@ -1,3 +1,4 @@
-Surface/mesh plot : https://chart-studio.plotly.com/~Feetly_/6.embed
-Scatter Plot : https://chart-studio.plotly.com/~Feetly_/8.embed
-Line Plot : https://chart-studio.plotly.com/~Feetly_/10.embed
+Surface : https://chart-studio.plotly.com/~Feetly_/18.embed
+Mesh plot : https://chart-studio.plotly.com/~Feetly_/16.embed
+Scatter Plot : https://chart-studio.plotly.com/~Feetly_/14.embed
+Line Plot : https://chart-studio.plotly.com/~Feetly_/12.embed
