@@ -13,6 +13,8 @@
 
 \documentclass[12pt]{article}
 
+\usepackage{graphicx}
+
 \begin{document}
 \maketitle
 
@@ -46,12 +48,56 @@ the random number generated, \textbf{X} is less than \textbf{P}, else it returns
 On looking at the data, we see that when we fix the width of the border, the time taken to cross the border looks linear till probability reaches really high values.
 As soon as the probability becomes \(\geq 0.9\), the time taken starts shooting up exponentially.
 \newline
-**Insert graph here**
+\begin{figure}[h!]
+        \includegraphics[width=\linewidth]{pvst.png}
+        \caption{P vs T}
+        \label{fig:graph1}
+\end{figure}
 \newline
 On the other hand, when we keep probability constant and vary width, the time taken to cross the border,
 grows linearly with the width of the border.
 \newline
-**Insert graph here**
+\begin{figure}[h!]
+        \includegraphics[width=\linewidth]{wvst.png}
+        \caption{W vs T}
+        \label{fig:graph2}
+\end{figure}
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+* While 3D plot gives intresting scenerio.
+\newline
+\begin{figure}[h!]
+        \includegraphics[width=\linewidth]{3d1.png}
+        \caption{View-1}
+        \label{fig:graph3}
+\end{figure}
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\begin{figure}[h!]
+        \includegraphics[width=\linewidth]{3d2.png}
+        \caption{View-2}
+        \label{fig:graph4}
+\end{figure}
+\newline
 
 \section{Conclusions}\label{conclusions}
 We can conclude that, when probability of the sensor being switched on becomes very large (\textit{when it is very likely that the sensor is on!}),
