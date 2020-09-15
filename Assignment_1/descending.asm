@@ -15,10 +15,12 @@ main:
 	add %x0, %x0, %x5
 	load %x0, $n, %x11
 	add %x0, %x11, %x12
+	add %x0, %x11, %x13
+	subi %x13, 1, %x13
 	addi %x0, 65535, %x9
 loop:
 	add %x0, %x0, %x3
-	beq %x5, %x11, endl
+	beq %x5, %x11, loop2
 	blt %x5, %x11, loop1
 loop1:
 	load %x3, $a, %x4
@@ -44,8 +46,9 @@ loop2:
 	bgt %x12, %x0, loop3
 	beq %x12, %x0, endl
 loop3:
-	store %x9, $a, %x3
-	addi %x3, 1, %x3
+	load %x9, $a, %x15
+	store %x15, $a, %x13
+	subi %x13, 1, %x13
 	subi %x12, 1, %x12
 	jmp loop2
 endl:
