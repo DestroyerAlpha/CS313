@@ -1,10 +1,14 @@
 	.data
 a:
-	10
+	2
 	.text
 main:
 	addi %x0, 2, %x3
 	load %x0, $a, %x4
+	beq %x0, %x4, endl
+	beq %x3, %x4, success
+	addi %x0, 1, %x7
+	beq %x7, %x4, endl
 	divi %x4, 2, %x5
 loop:
 	div %x4, %x3, %x6
