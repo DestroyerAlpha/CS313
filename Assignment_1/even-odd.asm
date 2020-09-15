@@ -9,8 +9,8 @@ main:
 	bgt %x4, %x0, success
 	beq %x5, %x4, endl	
 success:
-	addi %x0, 1, %x10
+	subi %x0, 1, %x10
 	end
 endl:
-	subi %x0, 1, %x10
+	addi %x0, 1, %x10
 	end
