@@ -21,8 +21,7 @@ public class Simulator {
 	
 	public static void assemble(String objectProgramFile)
 	{
-		File file = new File("foo.out");
-
+		File file = new File(objectProgramFile);
 		int stack_top = 65536;
 		System.out.println(ParsedProgram.symtab.get("main"));
 		for(int i=0;i<ParsedProgram.data.size();i++)
@@ -53,11 +52,11 @@ public class Simulator {
 							op = String.format("%5s", op).replaceAll(" ", "0");
 							instruction += op;	//rs1 bits
 							
-							String op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand2().getValue());
+							op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand2().getValue());
 							op = String.format("%5s", op).replaceAll(" ", "0");
 							instruction += op;	//rs2 bits
 
-							String op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getDestinationOperand().getValue());
+							op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getDestinationOperand().getValue());
 							op = String.format("%5s", op).replaceAll(" ", "0");
 							instruction += op;	//rd bits
 
@@ -83,19 +82,19 @@ public class Simulator {
 								op = String.format("%5s", op).replaceAll(" ", "0");
 								instruction += op;	//rs1 bits
 
-								String op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getDestinationOperand().getValue());
+								op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getDestinationOperand().getValue());
 								op = String.format("%5s", op).replaceAll(" ", "0");
 								instruction += op;	//rd bits
 
 								if(ParsedProgram.getInstructionAt(i).getSourceOperand1().operandType==Operand.OperandType.Immediate)
 								{
-									String op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand2().getValue());
+									op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand2().getValue());
 									op = String.format("%17s", op).replaceAll(" ", "0");
 									instruction += op;	//absolute immediate
 								}
 								else
 								{
-									String op = Integer.toBinaryString(ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getSourceOperand2().getLabelValue()));
+									op = Integer.toBinaryString(ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getSourceOperand2().getLabelValue()));
 									op = String.format("%17s", op).replaceAll(" ", "0");
 									instruction += op;	//label / symbol
 								}
@@ -111,19 +110,19 @@ public class Simulator {
 							op = String.format("%5s", op).replaceAll(" ", "0");
 							instruction += op;	//rs1 bits
 
-							String op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getDestinationOperand().getValue());
+							op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getDestinationOperand().getValue());
 							op = String.format("%5s", op).replaceAll(" ", "0");
 							instruction += op;	//rd bits
 
 							if(ParsedProgram.getInstructionAt(i).getSourceOperand1().operandType==Operand.OperandType.Immediate)
 							{
-								String op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand2().getValue());
+								op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand2().getValue());
 								op = String.format("%17s", op).replaceAll(" ", "0");
 								instruction += op;	//absolute immediate
 							}
 							else
 							{
-								String op = Integer.toBinaryString(ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getSourceOperand2().getLabelValue()));
+								op = Integer.toBinaryString(ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getSourceOperand2().getLabelValue()));
 								op = String.format("%17s", op).replaceAll(" ", "0");
 								instruction += op;	//label / symbol
 							}
@@ -169,14 +168,12 @@ public class Simulator {
 			}
 
 			String result = binaryUnicodeToString(instruction);
-			System.out.println(result);
 			System.out.println(result.trim());
 			
 			try (FileOutputStream fos = new FileOutputStream(file);
 					BufferedOutputStream bos = new BufferedOutputStream(fos);
 					DataOutputStream dos = new DataOutputStream(bos)) {
 				dos.writeBytes(result);
-				System.out.println("Successfully written data to the file");
 			}
 			catch (IOException e) {
 				e.printStackTrace();
@@ -193,58 +190,33 @@ public class Simulator {
 		//3. write the data to the file
 		//4. assemble one instruction at a time, and write to the file
 		//5. close the file
-
-		public static String binaryUnicodeToString(String binary)
-		{
-
-			System.out.println("2435654345676678");
-			System.out.println(Long.parseLong(binary, 2));
-			System.out.println("2435654345676678");
-			byte[] array = ByteBuffer.allocate(4).putInt(
-					Integer.parseInt(binary, 2)
-			).array();
-	
-			return new String(array, StandardCharsets.UTF_8);
-		}
-
-		public static int instruction_code(Instruction.OperationType in)
-		{
-			ArrayList<Instruction.OperationType> ins = new ArrayList<Instruction.OperationType>();
-			for(Instruction.OperationType o: Instruction.OperationType.values())
-			{
-				ins.add(o);
-			}
-			for(int i=0;i<ins.size();i++)
-			{
-				if(ins.get(i)==in)
-				{
-					return i;
-				}
-			}
-			return -1;
-		}
-
-		public static byte[] toBinary5bit(int number) { 
-			byte[] binary = new byte[5]; 
-			int index = 0; 
-			int copyOfInput = number; 
-			while (copyOfInput > 0) { 
-				binary[index++] = (byte) (copyOfInput % 2); 
-				copyOfInput = copyOfInput / 2; 
-			}
-			return binary; 
-		}
-		
-		public static byte[] toBinary(int number) { 
-			byte[] binary = new byte[32]; 
-			int index = 0; 
-			int copyOfInput = number; 
-			while (copyOfInput > 0) { 
-				binary[index++] = (byte) (copyOfInput % 2); 
-				copyOfInput = copyOfInput / 2; 
-			}
-			return binary; 
-		}
 	}
+
+	public static int instruction_code(Instruction.OperationType in)
+	{
+		ArrayList<Instruction.OperationType> ins = new ArrayList<Instruction.OperationType>();
+		for(Instruction.OperationType o: Instruction.OperationType.values())
+		{
+			ins.add(o);
+		}
+		for(int i=0;i<ins.size();i++)
+		{
+			if(ins.get(i)==in)
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public static String binaryUnicodeToString(String binary) 
+	{
+        byte[] array = ByteBuffer.allocate(4).putInt(
+                Integer.parseInt(binary, 2)
+        ).array();
+
+		String s = new String(array, StandardCharsets.UTF_8);
+        return s;
+    }
 	
 }
