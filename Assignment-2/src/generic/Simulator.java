@@ -3,7 +3,7 @@ package generic;
 import java.io.*;
 import java.util.*;
 import java.io.FileInputStream;
-import generic.Operand.OperandType;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
@@ -21,12 +21,15 @@ public class Simulator {
 	
 	public static void assemble(String objectProgramFile)
 	{
-		File file = new File(objectProgramFile);
-		int stack_top = 65536;
-		System.out.println(ParsedProgram.symtab.get("main"));
+		try {
+			FileOutputStream fos = new FileOutputStream(objectProgramFile);
+		
+		
+		DataOutputStream dos = new DataOutputStream(fos);
+		dos.writeInt(ParsedProgram.symtab.get("main"));
 		for(int i=0;i<ParsedProgram.data.size();i++)
 		{
-			System.out.println(ParsedProgram.data.get(i));
+			dos.writeInt(ParsedProgram.data.get(i));
 		}
 		for(int i=ParsedProgram.symtab.get("main");i<ParsedProgram.code.size()+ParsedProgram.symtab.get("main");i++)
 		{
@@ -63,7 +66,6 @@ public class Simulator {
 							instruction += "000000000000";	//unused bits in machine code is set of all zeros :)
 							break;
 						} 
-			
 			//R2I type
 			case addi :
 			case subi :
@@ -122,7 +124,7 @@ public class Simulator {
 							}
 							else
 							{
-								op = Integer.toBinaryString(ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getSourceOperand2().getLabelValue()));
+								op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getProgramCounter() - ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getSourceOperand2().getLabelValue()));
 								op = String.format("%17s", op).replaceAll(" ", "0");
 								instruction += op;	//label / symbol
 							}
@@ -166,21 +168,27 @@ public class Simulator {
 							break;
 						}
 			}
-
-			String result = binaryUnicodeToString(instruction);
-			System.out.println(result.trim());
-			
-			try (FileOutputStream fos = new FileOutputStream(file);
-					BufferedOutputStream bos = new BufferedOutputStream(fos);
-					DataOutputStream dos = new DataOutputStream(bos)) {
-				dos.writeBytes(result);
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}	
-
+			int flag = 0;
+			System.out.println(instruction);
+			// if(instruction.charAt(0) == '1')
+			// {
+			// 	instruction = '-' + instruction.substring(1);
+			// 	flag = 1;
+			// }
+			// System.out.println();
+			// String result = binaryUnicodeToString(instruction);
+			// System.out.println(result.trim());
+			int foo = new BigInteger(instruction, 2).intValue();
+			// if(flag == 0)
+			// 	dos.writeInt(Integer.parseInt(instruction, 2));
+			// else
+			// 	dos.writeInt(Integer.parseInt(instruction, 2)-1);
+			dos.writeInt(foo);
+		}
+		dos.close();
+	} catch (Exception e) {
+		System.out.println(e);
+	}
 		// System.out.println(ParsedProgram.symtab.get("loop"));
 		
 		
