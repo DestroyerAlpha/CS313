@@ -82,22 +82,28 @@ public class Simulator {
 			case store :	{
 								String op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand1().getValue());
 								op = String.format("%5s", op).replaceAll(" ", "0");
+								// System.out.println(op);
 								instruction += op;	//rs1 bits
 
 								op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getDestinationOperand().getValue());
 								op = String.format("%5s", op).replaceAll(" ", "0");
+								// System.out.println(op);
 								instruction += op;	//rd bits
 
-								if(ParsedProgram.getInstructionAt(i).getSourceOperand1().operandType==Operand.OperandType.Immediate)
+								if(ParsedProgram.getInstructionAt(i).getSourceOperand2().operandType==Operand.OperandType.Immediate)
 								{
+									// System.out.println("I am in immediate");
 									op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand2().getValue());
 									op = String.format("%17s", op).replaceAll(" ", "0");
+									// System.out.println(op);
 									instruction += op;	//absolute immediate
 								}
 								else
 								{
+									// System.out.println("I am not in immediate");
 									op = Integer.toBinaryString(ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getSourceOperand2().getLabelValue()));
 									op = String.format("%17s", op).replaceAll(" ", "0");
+									// System.out.println(op);
 									instruction += op;	//label / symbol
 								}
 
@@ -111,22 +117,38 @@ public class Simulator {
 							String op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand1().getValue());
 							op = String.format("%5s", op).replaceAll(" ", "0");
 							instruction += op;	//rs1 bits
+							// System.out.println(op);
 
-							op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getDestinationOperand().getValue());
+							op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand2().getValue());
 							op = String.format("%5s", op).replaceAll(" ", "0");
 							instruction += op;	//rd bits
+							// System.out.println(op);
 
-							if(ParsedProgram.getInstructionAt(i).getSourceOperand1().operandType==Operand.OperandType.Immediate)
+							if(ParsedProgram.getInstructionAt(i).getDestinationOperand().operandType==Operand.OperandType.Immediate)
 							{
-								op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getSourceOperand2().getValue());
-								op = String.format("%17s", op).replaceAll(" ", "0");
+								// System.out.println("In immediate");
+								op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getDestinationOperand().getValue());
+								if(op.length()>17)
+								{
+									op = op.substring(op.length()-17);
+								}
+								else
+									op = String.format("%17s", op).replaceAll(" ", "0");
 								instruction += op;	//absolute immediate
+								System.out.println(op);
 							}
 							else
 							{
-								op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getProgramCounter() - ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getSourceOperand2().getLabelValue()));
-								op = String.format("%17s", op).replaceAll(" ", "0");
+								// System.out.println("Not in immedidate");
+								op = Integer.toBinaryString(- ParsedProgram.getInstructionAt(i).getProgramCounter() + ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getDestinationOperand().getLabelValue()));
+								if(op.length()>17)
+								{
+									op = op.substring(op.length()-17);
+								}
+								else
+									op = String.format("%17s", op).replaceAll(" ", "0");
 								instruction += op;	//label / symbol
+								// System.out.println(op);
 							}
 
 							break;
@@ -145,9 +167,15 @@ public class Simulator {
 								else if(ParsedProgram.getInstructionAt(i).getDestinationOperand().operandType==Operand.OperandType.Label)
 								{
 									instruction += "00000";
-
-									String op = Integer.toBinaryString(ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getDestinationOperand().getLabelValue()));
-									op = String.format("%17s", op).replaceAll(" ", "0");
+									// System.out.println("i am in label");
+									// String op = Integer.toBinaryString(ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getDestinationOperand().getLabelValue()));
+									String op = Integer.toBinaryString(- ParsedProgram.getInstructionAt(i).getProgramCounter() + ParsedProgram.symtab.get(ParsedProgram.getInstructionAt(i).getDestinationOperand().getLabelValue()));
+									if(op.length()>22)
+									{
+										op = op.substring(op.length()-22);
+									}
+									else
+										op = String.format("%22s", op).replaceAll(" ", "0");
 									instruction += op;	//imm
 								}
 								else if(ParsedProgram.getInstructionAt(i).getDestinationOperand().operandType==Operand.OperandType.Immediate)
@@ -155,7 +183,12 @@ public class Simulator {
 									instruction += "00000";
 
 									String op = Integer.toBinaryString(ParsedProgram.getInstructionAt(i).getDestinationOperand().getValue());
-									op = String.format("%17s", op).replaceAll(" ", "0");
+									if(op.length()>22)
+									{
+										op = op.substring(op.length()-22);
+									}
+									else
+										op = String.format("%22s", op).replaceAll(" ", "0");
 									instruction += op;	//label / symbol
 								}
 
@@ -168,8 +201,8 @@ public class Simulator {
 							break;
 						}
 			}
-			int flag = 0;
-			System.out.println(instruction);
+			// int flag = 0;
+			// System.out.println(instruction);
 			// if(instruction.charAt(0) == '1')
 			// {
 			// 	instruction = '-' + instruction.substring(1);
