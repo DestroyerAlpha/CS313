@@ -1,11 +1,6 @@
 package generic;
 
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
+import java.io.*;
 import processor.Clock;
 import processor.Processor;
 import processor.pipeline.IF_EnableLatchType;
@@ -16,7 +11,7 @@ public class Simulator {
 	static boolean simulationComplete;
 	static IF_EnableLatchType IF_EnableLatch;
 	
-	public static void setupSimulation(String assemblyProgramFile, Processor p) throws IOException
+	public static void setupSimulation(String assemblyProgramFile, Processor p)
 	{
 		Simulator.processor = p;
 		loadProgram(assemblyProgramFile);
@@ -24,46 +19,38 @@ public class Simulator {
 		simulationComplete = false;
 	}
 	
-	@SuppressWarnings("resource")
-	static void loadProgram(String assemblyProgramFile) throws IOException
+	static void loadProgram(String assemblyProgramFile)
 	{
-		/*
-		 * TODO
-		 * 1. load the program into memory according to the program layout described
-		 *    in the ISA specification
-		 * 2. set PC to the address of the first instruction in the main
-		 * 3. set the following registers:
-		 *     x0 = 0
-		 *     x1 = 65535
-		 *     x2 = 65535
-		 */
-		InputStream is = null;
-	      DataInputStream dis = null;
-		
-		is = new FileInputStream(assemblyProgramFile);
-        dis = new DataInputStream(is);
-        int i=0;
-        while(dis.available()>0) {
-        	
-        	int k = dis.readInt();
-        	if(i==0) {
-        	processor.getRegisterFile().setProgramCounter(k);
-        	}
-        	else {
-        		processor.getMainMemory().setWord(i-1,k);
-        	}
-        		i++;
-        	}
-        
-        processor.getRegisterFile().setValue(0, 0);
-        processor.getRegisterFile().setValue(1, 65535);
-        processor.getRegisterFile().setValue(2, 65535);
+
+		InputStream ifile = null;
+		DataInputStream dfile = null;
+	  
+		ifile = new FileInputStream(assemblyProgramFile);
+		dfile = new DataInputStream(ifile);
+
+		int i=0;
+		while(dfile.available()>0) {
+			
+			int j = dfile.readInt();
+			if(i!=0) {
+				processor.getMainMemory().setWord(i-1,j);
+			
+			}
+			else {
+				processor.getRegisterFile().setProgramCounter(j);
+			}
+				i++;
 		}
+		
+		processor.getRegisterFile().setValue(0, 0);
+		processor.getRegisterFile().setValue(1, 65535);
+		processor.getRegisterFile().setValue(2, 65535);
+	}
 	
 	public static void simulate()
 	{
 		while(simulationComplete == false)
-		{	
+		{
 			processor.getIFUnit().performIF();
 			Clock.incrementClock();
 			processor.getOFUnit().performOF();
@@ -76,8 +63,7 @@ public class Simulator {
 			Clock.incrementClock();
 		}
 		
-		
-		//statistics calculation is done instruction fetch stage
+		// Statistics will be done.
 	}
 	
 	public static void setSimulationComplete(boolean value)

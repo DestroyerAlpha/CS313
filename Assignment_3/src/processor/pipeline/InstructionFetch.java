@@ -36,8 +36,12 @@ public class InstructionFetch {
 	public void performIF()
 	{
 		if(IF_EnableLatch.isIF_enable()||EX_IF_Latch.isIF_enable())
-		{	stat.setNumberOfInstructions(stat.getNumberOfInstructions()+1);
-			stat.setNumberOfCycles(Statistics.numberOfInstructions*5);
+		{	
+			int ini=0,inc=0;
+			ini = stat.getNumberOfInstructions();
+			inc = Statistics.numberOfInstructions;
+			stat.setNumberOfInstructions(ini+1);
+			stat.setNumberOfCycles(inc*5);
 			int currentPC = containingProcessor.getRegisterFile().getProgramCounter();
 			if(EX_IF_Latch.isbt==true)
 			{
@@ -50,9 +54,5 @@ public class InstructionFetch {
 			enableDisableLatches();
 			
 		}
-		else {
-			//Do Nothing
-		}
 	}
-
 }

@@ -15,23 +15,6 @@ public class OperandFetch {
 		this.IF_OF_Latch = iF_OF_Latch;
 		this.OF_EX_Latch = oF_EX_Latch;
 	}
-	public int twoscompl(String a)
-	{
-		
-		String s1="";
-		for(int i=0;i<a.length();i++)
-		{
-			if(a.charAt(i)=='1')
-			{
-				s1=s1+'0';
-			}
-			else
-			{
-				s1=s1+'1';
-			}
-		}
-		return (-1*Integer.parseInt(s1,2)-1);
-	}
 	
 	public void performOF()
 	{   
@@ -149,6 +132,24 @@ public class OperandFetch {
 			OF_EX_Latch.setop2(op2);
 			OF_EX_Latch.setbt(bt);
 		}
+	}
+
+	public int twoscompl(String a)
+	{
+		
+		String s1="";
+		for(int i=0;i<a.length();i++)
+		{
+			if(a.charAt(i)=='1')
+			{
+				s1=s1+'0';
+			}
+			else
+			{
+				s1=s1+'1';
+			}
+		}
+		return (-1*Integer.parseInt(s1,2)-1);
 	}
 
 }

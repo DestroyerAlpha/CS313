@@ -22,11 +22,9 @@ public class EX_IF_LatchType {
 		this.isbt=isbrt;
 		if(isbrt==true) {
 			offset=bt;
-			//IF_EnableLatch.setIF_enable(true);
 		}
 		else
 		{	this.isbt=false;
-			//System.out.println("hdgfhhsd");
 			offset=0;
 		}
 	}

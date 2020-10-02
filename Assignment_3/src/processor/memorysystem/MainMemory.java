@@ -15,7 +15,6 @@ public class MainMemory {
 	
 	public void setWord(int address, int value)
 	{
-		//System.out.println("hdsgfh");
 		memory[address] = value;
 	}
 	

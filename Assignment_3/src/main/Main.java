@@ -1,5 +1,4 @@
 package main;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import configuration.Configuration;
@@ -12,7 +11,7 @@ import generic.Simulator;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		if(args.length != 3)
 		{
 			Misc.printErrorAndExit("usage: java -jar <path-to-jar-file> <path-to-config-file> <path-to-stat-file> <path-to-object-file>\n");
