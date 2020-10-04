@@ -20,32 +20,6 @@ public class Execute {
 		this.EX_IF_Latch = eX_IF_Latch;
 		this.IF_EnableLatch = IF_EnableLatc;
 	}
-	public String and(String s1,String s2)
-	{   String s3="";
-		for (int i=0;i<5;i++) {
-			char x = 'a';
-			x=' ';
-			x=s1.charAt(i);
-			if((x=='1')&& (x=='1')) {
-					s3=s3+"1";
-				}
-			else s3=s3+"0";
-		}
-		return s3;
-	}
-	public String or(String s1,String s2)
-	{   String s3="";
-		for (int i=0;i<5;i++) {
-			char x = 'a';
-			x=' ';
-			x=s1.charAt(i);
-			if((x=='1')||(x=='1')) {
-					s3=s3+"1";
-				}
-			else s3=s3+"0";
-		}
-		return s3;
-	}
 	
 	public void ALU()
 	{   
@@ -172,14 +146,14 @@ public class Execute {
 			
 		case 26:
 			if(op1!=op2) {
-			bt=imm;;
+			bt=imm;
 			isbt=true;
 			}
 			break;
 			
 		case 27:
 			if(op1<op2) {
-			bt=imm;;
+			bt=imm;
 			isbt=true;
 			}
 			break;
@@ -205,7 +179,7 @@ public class Execute {
 			EX_IF_Latch.setIF_enable(true);
 
 		}
-		else if(this.opcode.equals("11001")||this.opcode.equals("11010")||this.opcode.equals("11011")||this.opcode.equals("11100")) {
+		else if(this.opcode.equals("11000")||this.opcode.equals("11001")||this.opcode.equals("11010")||this.opcode.equals("11011")||this.opcode.equals("11100")) {
 			IF_EnableLatch.setIF_enable(true);
 		}
 		else {
@@ -215,33 +189,33 @@ public class Execute {
 	
 	public void performEX()
 	{ 
-		if(OF_EX_Latch.isEX_enable()) {
-		bt=OF_EX_Latch.getbt();
-		imm=OF_EX_Latch.getimm();
-		op1=OF_EX_Latch.getop1();
-		op2=OF_EX_Latch.getop2();
-		opcode=OF_EX_Latch.getopcode();
-		this.ALU();
-		if(containingProcessor.getRegisterFile().getProgramCounter()<20) {
-		}
-		EX_IF_Latch.setbt(isbt,bt);
-		
-		EX_MA_Latch.setalures(a);
-		if(OF_EX_Latch.getistype1()) {
-			EX_MA_Latch.setop2(OF_EX_Latch.getrd());
-		}
-		else
+		if(OF_EX_Latch.isEX_enable()) 
 		{
-		EX_MA_Latch.setop2(op2);
+			bt=OF_EX_Latch.getbt();
+			imm=OF_EX_Latch.getimm();
+			op1=OF_EX_Latch.getop1();
+			op2=OF_EX_Latch.getop2();
+			opcode=OF_EX_Latch.getopcode();
+			this.ALU();
+			if(containingProcessor.getRegisterFile().getProgramCounter()<20) {
+			}
+			EX_IF_Latch.setbt(isbt,bt);
+			
+			EX_MA_Latch.setalures(a);
+			if(OF_EX_Latch.getistype1()) {
+				EX_MA_Latch.setop2(OF_EX_Latch.getrd());
+			}
+			else
+			{
+			EX_MA_Latch.setop2(op2);
+			}
+			EX_MA_Latch.setisend(isend);
+			if(isbt==true||isst==true) {
+				isrw=false;
+			}
+			EX_MA_Latch.setis(isld,isst,isrw);
+			setEnableDisable();
 		}
-		EX_MA_Latch.setisend(isend);
-		if(isbt==true||isst==true) {
-			isrw=false;
-		}
-		EX_MA_Latch.setis(isld,isst,isrw);
-		setEnableDisable();
-		
-	}
 	}
 
 }
