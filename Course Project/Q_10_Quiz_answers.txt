@@ -1,0 +1,7 @@
+Booth's Algorithm in ARM Language.
+
+1.
+> There are 24 Static instructions in the code.
+> There are 553 Dynamic instructions in the code.
+
+2.
