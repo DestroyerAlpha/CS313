@@ -38,7 +38,7 @@ public class OperandFetch {
 			this.imm1=instr.substring(15,32);
 			char sign1=this.imm1.charAt(0);
 			if(sign1=='1') {
-				this.imm=twoscompl(this.imm1);
+				this.imm=twos_complement(this.imm1);
 			}
 			else {
 			this.imm1="000000000000000"+this.imm1;//check;
@@ -53,7 +53,7 @@ public class OperandFetch {
 			
 			if(sign.equals("1"))
 			{
-				this.bt= twoscompl(branchTarget);
+				this.bt= twos_complement(branchTarget);
 			}
 			else
 			{  
@@ -134,13 +134,12 @@ public class OperandFetch {
 		}
 	}
 
-	public int twoscompl(String a)
+	public int twos_complement(String str)
 	{
-		
 		String s1="";
-		for(int i=0;i<a.length();i++)
+		for(int i=0;i<str.length();i++)
 		{
-			if(a.charAt(i)=='1')
+			if(str.charAt(i)=='1')
 			{
 				s1=s1+'0';
 			}
