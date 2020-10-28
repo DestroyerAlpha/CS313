@@ -9,7 +9,7 @@ public class Execute {
 	EX_MA_LatchType EX_MA_Latch;
 	EX_IF_LatchType EX_IF_Latch;
 	ALU alu=new ALU();
-	co_unit controlunit = new co_unit();
+	ControlUnit controlunit = new ControlUnit();
 	boolean is_end = false;
 	public Execute(Processor containingProcessor, OF_EX_LatchType oF_EX_Latch, EX_MA_LatchType eX_MA_Latch, EX_IF_LatchType eX_IF_Latch)
 	{
@@ -102,10 +102,10 @@ public class Execute {
 			{
 				case 1:
 					if(containingProcessor.getIFUnit().is_end == true) {
-							Statistics.controlhaz +=1 ;
+							Statistics.control_hazard +=1 ;
 					}
 					else {
-						Statistics.controlhaz +=2 ;
+						Statistics.control_hazard +=2 ;
 					}
 					EX_IF_Latch.setisbranchtaken();
 					EX_IF_Latch.setbranchtarget(branchPC);

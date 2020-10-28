@@ -7,7 +7,7 @@ public class RegisterWrite {
 	Processor containingProcessor;
 	MA_RW_LatchType MA_RW_Latch;
 	IF_EnableLatchType IF_EnableLatch;
-	co_unit controlunit = new co_unit();
+	ControlUnit controlunit = new ControlUnit();
 	
 	public RegisterWrite(Processor containingProcessor, MA_RW_LatchType mA_RW_Latch, IF_EnableLatchType iF_EnableLatch)
 	{
@@ -53,7 +53,7 @@ public class RegisterWrite {
 				switch(controlunit.opcode)
 				{
 					case "10110":
-						result = MA_RW_Latch.getldres();
+						result = MA_RW_Latch.getload_result();
 						break;
 					default:
 						result = MA_RW_Latch.getalures();

@@ -1,6 +1,6 @@
 package processor.pipeline;
 
-public class co_unit {
+public class ControlUnit {
 	int instruction;
 	String opcode="",rs1="",rs2="",rd="",Imm = "";
 	public boolean r3(String op) {
