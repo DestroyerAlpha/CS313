@@ -1,0 +1,3 @@
+Number of cycles taken = 314
+The number of times the OF stage needed to stall because of a data_hazardard = 37
+The number of times an instruction on a wrong branch path enteredthe pipeline = 176

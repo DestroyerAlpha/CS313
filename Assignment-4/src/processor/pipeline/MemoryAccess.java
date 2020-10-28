@@ -6,7 +6,7 @@ public class MemoryAccess {
 	Processor containingProcessor;
 	EX_MA_LatchType EX_MA_Latch;
 	MA_RW_LatchType MA_RW_Latch;
-	co_unit controlunit = new co_unit();
+	ControlUnit controlunit = new ControlUnit();
 	boolean is_end = false;
 	
 	public MemoryAccess(Processor containingProcessor, EX_MA_LatchType eX_MA_Latch, MA_RW_LatchType mA_RW_Latch)
@@ -38,7 +38,7 @@ public class MemoryAccess {
 			//System.out.println("MA:"+"\n");
 			int op2 = EX_MA_Latch.getop2();
 			int alures = EX_MA_Latch.getaluRes();
-			int ldres=0;
+			int load_result=0;
 			
 			int instruction = EX_MA_Latch.getInstruction();
 			controlunit.setInstruction(instruction);
@@ -54,8 +54,8 @@ public class MemoryAccess {
 			}
 			else if (controlunit.opcode.equals("10110")){
 	
-				ldres = containingProcessor.getMainMemory().getWord(alures);
-				MA_RW_Latch.setldres(ldres);
+				load_result = containingProcessor.getMainMemory().getWord(alures);
+				MA_RW_Latch.setLoadResult(load_result);
 			}
 			else{
 				MA_RW_Latch.setalures(alures);

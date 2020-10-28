@@ -39,6 +39,7 @@ public class Simulator {
 				}
 					i++;
 			}
+			dfile.close();
 		}
 		catch (Exception e) 
 		{

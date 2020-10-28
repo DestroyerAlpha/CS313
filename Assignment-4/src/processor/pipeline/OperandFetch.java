@@ -7,7 +7,7 @@ public class OperandFetch {
 	Processor containingProcessor;
 	IF_OF_LatchType IF_OF_Latch;
 	OF_EX_LatchType OF_EX_Latch;
-	co_unit controlunit = new co_unit();
+	ControlUnit controlunit = new ControlUnit();
 	boolean is_end = false;
 	public boolean r3(String op) {
 		if(op.equals("")) return false;
@@ -399,7 +399,6 @@ public class OperandFetch {
 					OF_EX_Latch.setInstruction(instruction);
 					OF_EX_Latch.setimmx(convertbin(immx));
 					OF_EX_Latch.setbranchtarget(convertbin(immx) + containingProcessor.getRegisterFile().getProgramCounter()-1);
-					//containingProcessor.getcontrol_unit().setopcode(instructionString.substring(0,5));
 					OF_EX_Latch.setoperand1(operand1);
 					OF_EX_Latch.setoperand2(operand2);
 					OF_EX_Latch.setrd(Integer.parseInt(rd,2));
@@ -408,7 +407,7 @@ public class OperandFetch {
 					OF_EX_Latch.setEX_enable(true);
 					break;
 				default:
-					Statistics.datahaz++;
+					Statistics.data_hazard++;
 					containingProcessor.getIFUnit().conflict = true ;
 					break;
 			}
