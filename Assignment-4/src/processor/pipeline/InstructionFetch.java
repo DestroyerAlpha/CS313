@@ -1,8 +1,5 @@
 package processor.pipeline;
-
-import generic.Simulator;
 import generic.Statistics;
-import processor.Clock;
 import processor.Processor;
 
 public class InstructionFetch {

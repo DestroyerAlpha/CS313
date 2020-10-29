@@ -17,8 +17,30 @@ public class ControlUnit {
 		else return false;
 		
 	}
+	public boolean isR2I1(String op) {
+		if(op.equals("")) return false;
+		if(op.charAt(4)=='1'  && !(op.charAt(0)=='1' && op.charAt(1)=='1') && !op.equals("10111"))
+			return true;
+		else return false;
+		
+	}
 	
-	public boolean ri(String op) {
+	public boolean isR2I2(String op) {//load or store
+		if(op.equals("")) return false;
+		if((op.equals("10110") || op.equals("10111")))
+			return true;
+		else return false;
+		
+	}
+	
+	public boolean isR2I3(String op) { // branch
+		if(op.equals("")) return false;
+		if((op.charAt(0)=='1' && op.charAt(1)=='1')&&!op.equals("11000")&&!op.equals("11101")  )
+			return true;
+		else return false;
+		
+	}
+	public boolean isRI(String op) {
 		if(op.equals("")) return false;
 		if(op.equals("11101") || op.equals("11000"))
 			return true;
@@ -48,7 +70,7 @@ public class ControlUnit {
 			rd=instructionString.substring(10,15);
 			Imm=instructionString.substring(15,32);
 		}
-		switch(String.valueOf(ri(opcode)))
+		switch(String.valueOf(isRI(opcode)))
 		{
 			case "true":
 			rd=instructionString.substring(5,10);

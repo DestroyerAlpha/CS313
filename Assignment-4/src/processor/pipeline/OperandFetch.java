@@ -7,54 +7,8 @@ public class OperandFetch {
 	Processor containingProcessor;
 	IF_OF_LatchType IF_OF_Latch;
 	OF_EX_LatchType OF_EX_Latch;
-	ControlUnit controlunit = new ControlUnit();
 	boolean isEND = false;
-	public boolean isR3(String op) {
-		if(op.equals("")) return false;
-		if(op.charAt(4)=='0' && !(op.charAt(0)=='1' && op.charAt(1)=='1') && !op.equals("10110"))
-			return true;
-		else return false;
-		
-	}
-	public boolean isR2I(String op) {
-		if(op.equals("")) return false;
-		if( ((op.charAt(4)=='1') || op.equals("10110") || op.equals("11010") ||op.equals("11100") ) && !op.equals("11101"))
-			return true;
-		else return false;
-		
-	}
-	
-	public boolean isR2I1(String op) {
-		if(op.equals("")) return false;
-		if(op.charAt(4)=='1'  && !(op.charAt(0)=='1' && op.charAt(1)=='1') && !op.equals("10111"))
-			return true;
-		else return false;
-		
-	}
-	
-	public boolean isR2I2(String op) {//load or store
-		if(op.equals("")) return false;
-		if((op.equals("10110") || op.equals("10111")))
-			return true;
-		else return false;
-		
-	}
-	
-	public boolean isR2I3(String op) { // branch
-		if(op.equals("")) return false;
-		if((op.charAt(0)=='1' && op.charAt(1)=='1')&&!op.equals("11000")&&!op.equals("11101")  )
-			return true;
-		else return false;
-		
-	}
-	
-	public boolean ri(String op) {
-		if(op.equals("")) return false;
-		if(op.equals("11101") || op.equals("11000"))
-			return true;
-		else return false;
-		
-	}
+	ControlUnit cu = new ControlUnit();
 	public OperandFetch(Processor containingProcessor, IF_OF_LatchType iF_OF_Latch, OF_EX_LatchType oF_EX_Latch)
 	{
 		this.containingProcessor = containingProcessor;
@@ -80,9 +34,8 @@ public class OperandFetch {
 		{
 			//TODO
 			
-
 			int instruction = IF_OF_Latch.getInstruction();
-			controlunit.setInstruction(instruction);
+			cu.setInstruction(instruction);
 			String instructionString = Integer.toBinaryString(instruction);
 			
 			int n = instructionString.length();
@@ -98,29 +51,21 @@ public class OperandFetch {
 			
 			if (instructionString.substring(0,5).equals("11101"))
 				isEND = true;
-			
-			switch(String.valueOf(isR3(opcode)))
+			if(cu.isR3(opcode))
 			{
-				case "true":
 					rd=instructionString.substring(15,20);
 					immx=instructionString.substring(20,32);
-					break;
 			}
-			switch(String.valueOf(isR2I(opcode)))
+			if(cu.isR2I(opcode))
 			{
-				case "true":
 					rd=instructionString.substring(10,15);
 					immx=instructionString.substring(15,32);
-					break;
 			}
-			switch(String.valueOf(ri(opcode)))
+			if(cu.isRI(opcode))
 			{
-				case "true":
 					rd=instructionString.substring(5,10);
 					immx=instructionString.substring(10,32);
-					break;
 			}
-		
 			String rp1 ;
 			String rp2 ;
 			if(!(opcode.equals("10111"))){ // if store
@@ -136,253 +81,249 @@ public class OperandFetch {
 			
 			
 			boolean conflict = false;
-			switch(String.valueOf(isR3(opcode)))
+			switch(String.valueOf(cu.isR3(opcode)))
 			{
 				case "true":
-					if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
+					if(containingProcessor.getEXUnit().cu.opcode.equals("00111") || containingProcessor.getEXUnit().cu.opcode.equals("00110")) {
 						if(rs1.equals("11111")){
 							conflict = true;
-						}
+						}							//Division before arithemtic operations
 						if(rs2.equals("11111")){
 							conflict = true;
 						}
 					}
-					if(isR3(containingProcessor.getEXUnit().controlunit.opcode) || isR2I1(containingProcessor.getEXUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
+					if(cu.isR3(containingProcessor.getEXUnit().cu.opcode) || cu.isR2I1(containingProcessor.getEXUnit().cu.opcode)) {
+						if(rs1.equals(containingProcessor.getEXUnit().cu.rd)){
 							conflict = true;
 						}
-						if(rs2.equals(containingProcessor.getEXUnit().controlunit.rd)){
+						if(rs2.equals(containingProcessor.getEXUnit().cu.rd)){
 								conflict = true;
-						}//System.out.println("*********EX1***********");
+						}                        //Immediate Arithemetic before arithmetic
 					}
-					if(isR3(containingProcessor.getMAUnit().controlunit.opcode) || isR2I1(containingProcessor.getMAUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
+					if(cu.isR3(containingProcessor.getMAUnit().cu.opcode) || cu.isR2I1(containingProcessor.getMAUnit().cu.opcode)) {
+						if(rs1.equals(containingProcessor.getMAUnit().cu.rd)){
 							conflict = true;
 						}
-						if(rs2.equals(containingProcessor.getMAUnit().controlunit.rd)){
+						if(rs2.equals(containingProcessor.getMAUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********MA1***********");
+						}                        //Immediate Arithemetic before arithmetic
 					}
-					if(isR3(containingProcessor.getRWUnit().controlunit.opcode) || isR2I1(containingProcessor.getRWUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
+					if(cu.isR3(containingProcessor.getRWUnit().cu.opcode) || cu.isR2I1(containingProcessor.getRWUnit().cu.opcode)) {
+						if(rs1.equals(containingProcessor.getRWUnit().cu.rd)){
 							conflict = true;
 						}
-						if(rs2.equals(containingProcessor.getRWUnit().controlunit.rd)){
+						if(rs2.equals(containingProcessor.getRWUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********RW1***********"+conflict);
+						}                        //Immediate Arithemetic before arithmetic
 					}
-					if(containingProcessor.getEXUnit().controlunit.opcode.equals("10110")) {
-						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
+					if(containingProcessor.getEXUnit().cu.opcode.equals("10110")) {
+						if(rs1.equals(containingProcessor.getEXUnit().cu.rd)){
 							conflict = true;
 						}
-						if(rs2.equals(containingProcessor.getEXUnit().controlunit.rd)){
+						if(rs2.equals(containingProcessor.getEXUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********EX2***********");
+						}                      //Load before arithmetic
 					}
-					if(containingProcessor.getMAUnit().controlunit.opcode.equals("10110")) {
-						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
+					if(containingProcessor.getMAUnit().cu.opcode.equals("10110")) {
+						if(rs1.equals(containingProcessor.getMAUnit().cu.rd)){
 							conflict = true;
 						}
-						if(rs2.equals(containingProcessor.getMAUnit().controlunit.rd)){
+						if(rs2.equals(containingProcessor.getMAUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********MA2***********");
+						}             //Load before arithmetic
 					}
 			}
 			
-			switch(String.valueOf(isR2I1(opcode)))
+			switch(String.valueOf(cu.isR2I1(opcode)))
 			{
 				case "true":
-					if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
+					if(containingProcessor.getEXUnit().cu.opcode.equals("00111") || containingProcessor.getEXUnit().cu.opcode.equals("00110")) {
 						if(rs1.equals("11111")){
-							conflict = true;
+							conflict = true;               //Division not completed before arithemtic operations
 						}
 					}
-					//System.out.println("PPPPPPPPP"+containingProcessor.getEXUnit().controlunit.opcode);
-					if(isR3(containingProcessor.getEXUnit().controlunit.opcode) || isR2I1(containingProcessor.getEXUnit().controlunit.opcode)) {
+					if(cu.isR3(containingProcessor.getEXUnit().cu.opcode) || cu.isR2I1(containingProcessor.getEXUnit().cu.opcode)) {
 							
-						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
+						if(rs1.equals(containingProcessor.getEXUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********EX3***********");
+						}                                //Arithemetic operations before Immediate arithemtic
 					}
-					if(isR3(containingProcessor.getMAUnit().controlunit.opcode) || isR2I1(containingProcessor.getMAUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
+					if(cu.isR3(containingProcessor.getMAUnit().cu.opcode) || cu.isR2I1(containingProcessor.getMAUnit().cu.opcode)) {
+						if(rs1.equals(containingProcessor.getMAUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********MA3***********");
+						}                              //Arithemetic operations before Immediate arithemtic
 					}
-					if(isR3(containingProcessor.getRWUnit().controlunit.opcode) || isR2I1(containingProcessor.getRWUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
+					if(cu.isR3(containingProcessor.getRWUnit().cu.opcode) || cu.isR2I1(containingProcessor.getRWUnit().cu.opcode)) {
+						if(rs1.equals(containingProcessor.getRWUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********RW2***********");
+						}                                 //Arithemetic operations before Immediate arithemtic
 					}
-					if(containingProcessor.getEXUnit().controlunit.opcode.equals("10110")) {
-					//	System.out.println("^^^^^^^^^^^^^"+rs1);
-						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
-							conflict = true;
-							//System.out.println("^^^^^^^^^^^^^"+rs1);
-							//System.out.println("^^^^^^^^^^^^^^^^^^^^^"+containingProcessor.getEXUnit().controlunit.rd);
-						}//System.out.println("*********EX4***********");
+					if(containingProcessor.getEXUnit().cu.opcode.equals("10110")) {
+						if(rs1.equals(containingProcessor.getEXUnit().cu.rd)){
+							conflict = true;              //Load before immediate arithemtic
+						}
 					}
-					if(containingProcessor.getMAUnit().controlunit.opcode.equals("10110")) {
-						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
+					if(containingProcessor.getMAUnit().cu.opcode.equals("10110")) {
+						if(rs1.equals(containingProcessor.getMAUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********MA4***********");
+						}                                   //Load before immediate arithemtic
 					}
 			}
 			
-			switch(String.valueOf(isR2I3(opcode)))
+			switch(String.valueOf(cu.isR2I3(opcode)))
 			{
 				case "true":
-					if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
+					if(containingProcessor.getEXUnit().cu.opcode.equals("00111") || containingProcessor.getEXUnit().cu.opcode.equals("00110")) {
 						if(rs1.equals("11111")){
 							conflict = true;
-						}
+						}				//Branching before division is computed
 						if(rd.equals("11111")){
 							conflict = true;
 						}
 					}
-					if(isR3(containingProcessor.getEXUnit().controlunit.opcode) || isR2I1(containingProcessor.getEXUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
+					if(cu.isR3(containingProcessor.getEXUnit().cu.opcode) || cu.isR2I1(containingProcessor.getEXUnit().cu.opcode)) {
+						if(rs1.equals(containingProcessor.getEXUnit().cu.rd)){
 							conflict = true;
 						}
-						if(rd.equals(containingProcessor.getEXUnit().controlunit.rd)){
+						if(rd.equals(containingProcessor.getEXUnit().cu.rd)){
 								conflict = true;
-						}//System.out.println("*********EX5***********");
+						}                        //Branching before arithmetic computations are completed
 					}
-					if(isR3(containingProcessor.getMAUnit().controlunit.opcode) || isR2I1(containingProcessor.getMAUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
+					if(cu.isR3(containingProcessor.getMAUnit().cu.opcode) || cu.isR2I1(containingProcessor.getMAUnit().cu.opcode)) {
+						if(rs1.equals(containingProcessor.getMAUnit().cu.rd)){
 							conflict = true;
 						}
-						if(rd.equals(containingProcessor.getMAUnit().controlunit.rd)){
+						if(rd.equals(containingProcessor.getMAUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********MA5***********"+conflict);
+						}                  //Branching before arithmetic computations are completed
 					}
-					if(isR3(containingProcessor.getRWUnit().controlunit.opcode) || isR2I1(containingProcessor.getRWUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
+					if(cu.isR3(containingProcessor.getRWUnit().cu.opcode) || cu.isR2I1(containingProcessor.getRWUnit().cu.opcode)) {
+						if(rs1.equals(containingProcessor.getRWUnit().cu.rd)){
 							conflict = true;
 						}
-						 if(rd.equals(containingProcessor.getRWUnit().controlunit.rd)){
+						 if(rd.equals(containingProcessor.getRWUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********RW3***********"+conflict);
+						}                   //Branching before arithmetic computations are completed
 					}
-					if(containingProcessor.getEXUnit().controlunit.opcode.equals("10110")) {
-						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
+					if(containingProcessor.getEXUnit().cu.opcode.equals("10110")) {
+						if(rs1.equals(containingProcessor.getEXUnit().cu.rd)){
 							conflict = true;
 						}
-						if(rd.equals(containingProcessor.getEXUnit().controlunit.rd)){
+						if(rd.equals(containingProcessor.getEXUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********EX6***********");
+						}                         //Branching before load is completed
 					}
-					if(containingProcessor.getMAUnit().controlunit.opcode.equals("10110")) {
-						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
+					if(containingProcessor.getMAUnit().cu.opcode.equals("10110")) {
+						if(rs1.equals(containingProcessor.getMAUnit().cu.rd)){
 							conflict = true;
 						}
-						if(rd.equals(containingProcessor.getMAUnit().controlunit.rd)){
+						if(rd.equals(containingProcessor.getMAUnit().cu.rd)){
 							conflict = true;
-						}//System.out.println("*********MA6***********"+conflict);
+						}                      //Branching before load is completed
 					}
 			}
 			
-			if(isR2I2(opcode))
+			if(cu.isR2I2(opcode))
 			{
 					if(opcode.equals("10110"))
 					{
-							if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
+							if(containingProcessor.getEXUnit().cu.opcode.equals("00111") || containingProcessor.getEXUnit().cu.opcode.equals("00110")) {
 								if(rs1.equals("11111")){
 									conflict = true;   //Loading remainder of division before it is computed in EX
 								}
 							}
-							if(isR3(containingProcessor.getEXUnit().controlunit.opcode) || isR2I1(containingProcessor.getEXUnit().controlunit.opcode)) {
-								if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
+							if(cu.isR3(containingProcessor.getEXUnit().cu.opcode) || cu.isR2I1(containingProcessor.getEXUnit().cu.opcode)) {
+								if(rs1.equals(containingProcessor.getEXUnit().cu.rd)){
 									conflict = true;         //Arithemetic operations in EX stage being loaded before computing
 								}
 							}
-							if(isR3(containingProcessor.getMAUnit().controlunit.opcode) || isR2I1(containingProcessor.getMAUnit().controlunit.opcode)) {
-								if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
+							if(cu.isR3(containingProcessor.getMAUnit().cu.opcode) || cu.isR2I1(containingProcessor.getMAUnit().cu.opcode)) {
+								if(rs1.equals(containingProcessor.getMAUnit().cu.rd)){
 									conflict = true;    //Arithemetic operations in MA stage being loaded before computing
 								}
 							}
-							if(isR3(containingProcessor.getRWUnit().controlunit.opcode) || isR2I1(containingProcessor.getRWUnit().controlunit.opcode)) {
-								if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
+							if(cu.isR3(containingProcessor.getRWUnit().cu.opcode) || cu.isR2I1(containingProcessor.getRWUnit().cu.opcode)) {
+								if(rs1.equals(containingProcessor.getRWUnit().cu.rd)){
 									conflict = true;        //Arithemetic operations in RW stage being loaded before computing
 								}
 							}
-							if(containingProcessor.getEXUnit().controlunit.opcode.equals("10110")) {
-								if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
+							if(containingProcessor.getEXUnit().cu.opcode.equals("10110")) {
+								if(rs1.equals(containingProcessor.getEXUnit().cu.rd)){
 									conflict = true;        //Store instruction in EX being loaded
 								}
 							}
-							if(containingProcessor.getMAUnit().controlunit.opcode.equals("10110")) {
-								if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
+							if(containingProcessor.getMAUnit().cu.opcode.equals("10110")) {
+								if(rs1.equals(containingProcessor.getMAUnit().cu.rd)){
 									conflict = true;     //Store instruction in MA being Loaded
 								}
 							}
-							if(containingProcessor.getEXUnit().controlunit.opcode.equals("10111")) {
+							if(containingProcessor.getEXUnit().cu.opcode.equals("10111")) {
 								if((Integer.parseInt(rs1,2) + convertbin(immx) )== 
-												Integer.parseInt((containingProcessor.getEXUnit().controlunit.rd),2) +
-												convertbin(containingProcessor.getEXUnit().controlunit.Imm) ) {
+												Integer.parseInt((containingProcessor.getEXUnit().cu.rd),2) +
+												convertbin(containingProcessor.getEXUnit().cu.Imm) ) {
 									conflict = true;          //Loading in same location
 								}
 							}
-							if(containingProcessor.getMAUnit().controlunit.opcode.equals("10111")) {
+							if(containingProcessor.getMAUnit().cu.opcode.equals("10111")) {
 								if((Integer.parseInt(rs1,2) + convertbin(immx) )== 
-												Integer.parseInt((containingProcessor.getMAUnit().controlunit.rd),2) +
-												convertbin(containingProcessor.getMAUnit().controlunit.Imm) ) {
+												Integer.parseInt((containingProcessor.getMAUnit().cu.rd),2) +
+												convertbin(containingProcessor.getMAUnit().cu.Imm) ) {
 									conflict = true;      //Loading in same location
 								}
 							}
 					}
-			}
-			else if(opcode.equals("10111"))
-			{
-					if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
-						if(rs1.equals("11111")){
-							conflict = true;
-						}                                  //Storing R31 before division is completed
-						if(rd.equals("11111")){
-							conflict = true;
-						}
-					}
-					if(isR3(containingProcessor.getEXUnit().controlunit.opcode) || isR2I1(containingProcessor.getEXUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
-							conflict = true;
-						}
-						if(rd.equals(containingProcessor.getEXUnit().controlunit.rd)){
+				else if(opcode.equals("10111"))
+				{
+						if(containingProcessor.getEXUnit().cu.opcode.equals("00111") || containingProcessor.getEXUnit().cu.opcode.equals("00110")) {
+							if(rs1.equals("11111")){
 								conflict = true;
-						}         //Storing arithemetic results before they are computed
-					}
-					if(isR3(containingProcessor.getMAUnit().controlunit.opcode) || isR2I1(containingProcessor.getMAUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
-							conflict = true;
+							}                                  //Storing R31 before division is completed
+							if(rd.equals("11111")){
+								conflict = true;
+							}
 						}
-						if(rd.equals(containingProcessor.getMAUnit().controlunit.rd)){
-							conflict = true;
-						}         //Storing arithemetic results before they are computed
-					}
-					if(isR3(containingProcessor.getRWUnit().controlunit.opcode) || isR2I1(containingProcessor.getRWUnit().controlunit.opcode)) {
-						if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
-							conflict = true;
+						if(cu.isR3(containingProcessor.getEXUnit().cu.opcode) || cu.isR2I1(containingProcessor.getEXUnit().cu.opcode)) {
+							if(rs1.equals(containingProcessor.getEXUnit().cu.rd)){
+								conflict = true;
+							}
+							if(rd.equals(containingProcessor.getEXUnit().cu.rd)){
+									conflict = true;
+							}         //Storing arithemetic results before they are computed
 						}
-						if(rd.equals(containingProcessor.getRWUnit().controlunit.rd)){
-							conflict = true;
-						}         //Storing arithemetic results before they are computed
-					}
-					if(containingProcessor.getEXUnit().controlunit.opcode.equals("10110")) {
-						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
-							conflict = true;
+						if(cu.isR3(containingProcessor.getMAUnit().cu.opcode) || cu.isR2I1(containingProcessor.getMAUnit().cu.opcode)) {
+							if(rs1.equals(containingProcessor.getMAUnit().cu.rd)){
+								conflict = true;
+							}
+							if(rd.equals(containingProcessor.getMAUnit().cu.rd)){
+								conflict = true;
+							}         //Storing arithemetic results before they are computed
 						}
-						if(rd.equals(containingProcessor.getEXUnit().controlunit.rd)){
-							conflict = true;
-						}         //Storing before load is completed
-					}
-					if(containingProcessor.getMAUnit().controlunit.opcode.equals("10110")) {
-						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
-							conflict = true;
+						if(cu.isR3(containingProcessor.getRWUnit().cu.opcode) || cu.isR2I1(containingProcessor.getRWUnit().cu.opcode)) {
+							if(rs1.equals(containingProcessor.getRWUnit().cu.rd)){
+								conflict = true;
+							}
+							if(rd.equals(containingProcessor.getRWUnit().cu.rd)){
+								conflict = true;
+							}         //Storing arithemetic results before they are computed
 						}
-						if(rd.equals(containingProcessor.getMAUnit().controlunit.rd)){
-							conflict = true;
-						}              ////Storing before load is completed
+						if(containingProcessor.getEXUnit().cu.opcode.equals("10110")) {
+							if(rs1.equals(containingProcessor.getEXUnit().cu.rd)){
+								conflict = true;
+							}
+							if(rd.equals(containingProcessor.getEXUnit().cu.rd)){
+								conflict = true;
+							}         //Storing before load is completed
+						}
+						if(containingProcessor.getMAUnit().cu.opcode.equals("10110")) {
+							if(rs1.equals(containingProcessor.getMAUnit().cu.rd)){
+								conflict = true;
+							}
+							if(rd.equals(containingProcessor.getMAUnit().cu.rd)){
+								conflict = true;
+							}              ////Storing before load is completed
+						}
 					}
-			}
+		}
 			boolean x = !conflict;
 			switch(String.valueOf(x))
 			{
