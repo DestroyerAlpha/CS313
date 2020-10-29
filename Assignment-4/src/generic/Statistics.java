@@ -5,21 +5,27 @@ import java.io.PrintWriter;
 public class Statistics {
 	
 	// TODO add your statistics here
-	public static int numberOfInstructions = 0;
-	public static int numberOfCycles = 0;
-	public static int data_hazard=0;
-	public static int control_hazard=0;
+	static int numberOfInstructions;
+	static int numberOfCycles;
+	public static int datahaz=0;
+	public static int controlhaz=0;
+
+	
 
 	public static void printStatistics(String statFile)
 	{
 		try
 		{
+			//System.out.println("PPP");
 			PrintWriter writer = new PrintWriter(statFile);
 			
-			// writer.println("Number of instructions executed = " + numberOfInstructions);
+			//writer.println("Number of instructions executed = " + numberOfInstructions);
 			writer.println("Number of cycles taken = " + numberOfCycles);
-			writer.println("The number of times the OF stage needed to stall because of a data_hazard = " + data_hazard);
-			writer.println("The number of times an instruction on a wrong branch path entered the pipeline = " + control_hazard);
+			writer.println("Number of data hazards = " + datahaz);
+			writer.println("Number of control hazards = " + controlhaz);
+			
+			// TODO add code here to print statistics in the output file
+			
 			writer.close();
 		}
 		catch(Exception e)
@@ -28,15 +34,12 @@ public class Statistics {
 		}
 	}
 	
-	public void setNumberOfInstructions(int numberOfInstructions) {
+	// TODO write functions to update statistics
+	public static void setNumberOfInstructions(int numberOfInstructions) {
 		Statistics.numberOfInstructions = numberOfInstructions;
 	}
 
-	public static void setNumberOfCycles(int numberOfCycles) {
+	public static  void setNumberOfCycles(int numberOfCycles) {
 		Statistics.numberOfCycles = numberOfCycles;
-	}
-
-	public int getNumberOfInstructions() {
-		return Statistics.numberOfInstructions;
 	}
 }

@@ -399,6 +399,7 @@ public class OperandFetch {
 					OF_EX_Latch.setInstruction(instruction);
 					OF_EX_Latch.setimmx(convertbin(immx));
 					OF_EX_Latch.setbranchtarget(convertbin(immx) + containingProcessor.getRegisterFile().getProgramCounter()-1);
+					//containingProcessor.getcontrol_unit().setopcode(instructionString.substring(0,5));
 					OF_EX_Latch.setoperand1(operand1);
 					OF_EX_Latch.setoperand2(operand2);
 					OF_EX_Latch.setrd(Integer.parseInt(rd,2));
@@ -407,7 +408,7 @@ public class OperandFetch {
 					OF_EX_Latch.setEX_enable(true);
 					break;
 				default:
-					Statistics.data_hazard++;
+					Statistics.datahaz++;
 					containingProcessor.getIFUnit().conflict = true ;
 					break;
 			}

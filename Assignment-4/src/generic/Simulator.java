@@ -1,16 +1,19 @@
 package generic;
-
 import java.io.*;
+import java.util.*;
+
 import processor.Clock;
 import processor.Processor;
 
 public class Simulator {
 		
 	static Processor processor;
-	static int Cycles = 0;
 	static boolean simulationComplete;
+	static int cycle=0;
 	
-	public static void setupSimulation(String assemblyProgramFile, Processor p)
+	 
+	
+	public static void setupSimulation(String assemblyProgramFile, Processor p) throws IOException
 	{
 		Simulator.processor = p;
 		loadProgram(assemblyProgramFile);
@@ -18,68 +21,64 @@ public class Simulator {
 		simulationComplete = false;
 	}
 	
-	static void loadProgram(String assemblyProgramFile)
+	static void loadProgram(String assemblyProgramFile) throws IOException
 	{
+		/*
+		 * TODO
+		 * 1. load the program into memory according to the program layout described
+		 *    in the ISA specification
+		 * 2. set PC to the address of the first instruction in the main
+		 * 3. set the following registers:
+		 *     x0 = 0
+		 *     x1 = 65535
+		 *     x2 = 65535
+		 */
+//		System.out.println(assemblyProgramFile);
 
-		try
-		{
-			InputStream infile = new FileInputStream(assemblyProgramFile);
-			DataInputStream dfile = new DataInputStream(infile);
-
+		try{
 			int i=0;
-			while(dfile.available()>0) {
-				
-				int j = dfile.readInt();
-				if(i!=0) {
-					processor.getMainMemory().setWord(i-1,j);
-				
-				}
-				else {
-					processor.getRegisterFile().setProgramCounter(j);
-				}
-					i++;
+			DataInputStream din = new DataInputStream(new FileInputStream(assemblyProgramFile)) ;
+			processor.getRegisterFile().setProgramCounter(din.readInt());
+//			System.out.println("dsfds");
+			while (din.available() > 0) {				
+				processor.getMainMemory().setWord(i,din.readInt());
+				i++ ;	
 			}
-			dfile.close();
+			processor.getMainMemory().getContentsAsString(0, 10);
+			processor.getRegisterFile().setValue(0,0);
+			processor.getRegisterFile().setValue(1,65535);
+			processor.getRegisterFile().setValue(2,65535);
+//			System.out.println(processor.getMainMemory().getContentsAsString(0, 50));
+			din.close();
+			
 		}
-		catch (Exception e) 
-		{
-			System.out.println(e);
-		}
+    	catch(FileNotFoundException e){
+    		System.out.println("Cannot Open the Input File");
+    		return;
+    	}
 		
 		
-		processor.getRegisterFile().setValue(0, 0);
-		processor.getRegisterFile().setValue(1, 65535);
-		processor.getRegisterFile().setValue(2, 65535);
 	}
 	
 	public static void simulate()
 	{
+		//System.out.println("sdsdsdsdsd");
 		while(simulationComplete == false)
 		{
-
-			// System.out.println("IF");
+			//System.out.println("HI");
+			processor.getRWUnit().performRW();
+			processor.getMAUnit().performMA();
+			processor.getEXUnit().performEX();
+			processor.getOFUnit().performOF();
 			processor.getIFUnit().performIF();
 			Clock.incrementClock();
-			// System.out.println("OF");
-			processor.getOFUnit().performOF();
-			Clock.incrementClock();
-			// System.out.println("EX");
-			processor.getEXUnit().performEX();
-			Clock.incrementClock();
-			// System.out.println("MA");
-			processor.getMAUnit().performMA();
-			Clock.incrementClock();
-			// System.out.println("RW");
-			processor.getRWUnit().performRW();
-			Clock.incrementClock();
-			// System.out.println("END");
-			Cycles++;
+			cycle++;
 		}
 		
 		// TODO
-		// set statistics.
-		// Statistics is done in Instructionfetch.java .
-		Statistics.setNumberOfCycles(Cycles);
+		// set statistics
+		//Statistics.setNumberOfInstructions(cycle);
+		Statistics.setNumberOfCycles(cycle);
 	}
 	
 	public static void setSimulationComplete(boolean value)

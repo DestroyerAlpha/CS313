@@ -53,7 +53,7 @@ public class RegisterWrite {
 				switch(controlunit.opcode)
 				{
 					case "10110":
-						result = MA_RW_Latch.getload_result();
+						result = MA_RW_Latch.getldres();
 						break;
 					default:
 						result = MA_RW_Latch.getalures();

@@ -102,10 +102,10 @@ public class Execute {
 			{
 				case 1:
 					if(containingProcessor.getIFUnit().is_end == true) {
-							Statistics.control_hazard +=1 ;
+							Statistics.controlhaz +=1 ;
 					}
 					else {
-						Statistics.control_hazard +=2 ;
+						Statistics.controlhaz +=2 ;
 					}
 					EX_IF_Latch.setisbranchtaken();
 					EX_IF_Latch.setbranchtarget(branchPC);

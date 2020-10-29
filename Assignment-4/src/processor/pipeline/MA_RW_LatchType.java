@@ -4,7 +4,7 @@ public class MA_RW_LatchType {
 	
 	boolean RW_enable;
 	int alures;
-	int load_result;
+	int ldres;
 	int rd;
 	int instruction ;
 	
@@ -25,16 +25,16 @@ public class MA_RW_LatchType {
 		alures = al;
 	}
 
-	public void setLoadResult(int ld){
-		load_result = ld;
+	public void setldres(int ld){
+		ldres = ld;
 	}
 	
 	public int getalures(){
 		return alures;
 	}
 
-	public int getload_result(){
-		return load_result;
+	public int getldres(){
+		return ldres;
 	}
 	
 	public void setrd(int r){

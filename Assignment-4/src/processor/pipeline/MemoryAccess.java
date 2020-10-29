@@ -38,7 +38,7 @@ public class MemoryAccess {
 			//System.out.println("MA:"+"\n");
 			int op2 = EX_MA_Latch.getop2();
 			int alures = EX_MA_Latch.getaluRes();
-			int load_result=0;
+			int ldres=0;
 			
 			int instruction = EX_MA_Latch.getInstruction();
 			controlunit.setInstruction(instruction);
@@ -54,8 +54,8 @@ public class MemoryAccess {
 			}
 			else if (controlunit.opcode.equals("10110")){
 	
-				load_result = containingProcessor.getMainMemory().getWord(alures);
-				MA_RW_Latch.setLoadResult(load_result);
+				ldres = containingProcessor.getMainMemory().getWord(alures);
+				MA_RW_Latch.setldres(ldres);
 			}
 			else{
 				MA_RW_Latch.setalures(alures);
