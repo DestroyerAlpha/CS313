@@ -36,7 +36,6 @@ public class InstructionFetch {
 					}
 					EX_IF_Latch.IF_enable=false;
 				}
-				Statistics.setNumberOfInstructions(Statistics.numberOfInstructions+1);
 				int currentPC = containingProcessor.getRegisterFile().getProgramCounter();
 				int newInstruction = containingProcessor.getMainMemory().getWord(currentPC);
 				
@@ -55,6 +54,7 @@ public class InstructionFetch {
 						if(instructionString.substring(0,5).equals("11101")) {
 							isEND = true;
 						}
+						Statistics.setNumberOfInstructions(Statistics.numberOfInstructions+1);
 						IF_OF_Latch.setInstruction(newInstruction);
 						containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
 

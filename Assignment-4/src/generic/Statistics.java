@@ -20,8 +20,8 @@ public class Statistics {
 			// TODO add code here to print statistics in the output file
 			writer.println("Number of instructions executed = " + numberOfInstructions);
 			writer.println("Number of cycles taken = " + numberOfCycles);
-			writer.println("Number of data hazards = " + datahaz);
-			writer.println("Number of control hazards = " + controlhaz);
+			writer.println("Number of times the OF stage needed to stall because of a datahazard = " + datahaz);
+			writer.println("Number of times an instruction on a wrong branch path entered the pipeline = " + controlhaz);
 			
 			
 			

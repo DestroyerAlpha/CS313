@@ -77,7 +77,7 @@ public class Simulator {
 		
 		// TODO
 		// set statistics
-		//Statistics.setNumberOfInstructions(cycle);
+		// Statistics.setNumberOfInstructions(cycle);
 		Statistics.setNumberOfCycles(cycle);
 	}
 	
