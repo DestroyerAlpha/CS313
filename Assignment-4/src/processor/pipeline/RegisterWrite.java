@@ -56,7 +56,7 @@ public class RegisterWrite {
 						result = MA_RW_Latch.getLoadResult();
 						break;
 					default:
-						result = MA_RW_Latch.getalures();
+						result = MA_RW_Latch.getFinal_result();
 						break;
 				}
 				int rd = MA_RW_Latch.getrd();

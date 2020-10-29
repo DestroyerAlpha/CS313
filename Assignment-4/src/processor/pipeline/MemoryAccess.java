@@ -37,7 +37,7 @@ public class MemoryAccess {
 		if(EX_MA_Latch.isMA_enable() && !isEND) {
 			//System.out.println("MA:"+"\n");
 			int op2 = EX_MA_Latch.getop2();
-			int alures = EX_MA_Latch.getaluRes();
+			int Final_result = EX_MA_Latch.getFinal_Result();
 			int load_result=0;
 			
 			int instruction = EX_MA_Latch.getInstruction();
@@ -50,15 +50,15 @@ public class MemoryAccess {
 				
 			
 			if(cu.isSt()){
-				containingProcessor.getMainMemory().setWord( alures, op2);
+				containingProcessor.getMainMemory().setWord( Final_result, op2);
 			}
 			else if (cu.opcode.equals("10110")){
 	
-				load_result = containingProcessor.getMainMemory().getWord(alures);
+				load_result = containingProcessor.getMainMemory().getWord(Final_result);
 				MA_RW_Latch.setLoadResult(load_result);
 			}
 			else{
-				MA_RW_Latch.setalures(alures);
+				MA_RW_Latch.setFinal_result(Final_result);
 			}
 			setEnableDisable();
 		
