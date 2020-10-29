@@ -6,7 +6,7 @@ public class MemoryAccess {
 	Processor containingProcessor;
 	EX_MA_LatchType EX_MA_Latch;
 	MA_RW_LatchType MA_RW_Latch;
-	ControlUnit controlunit = new ControlUnit();
+	ControlUnit cu = new ControlUnit();
 	boolean isEND = false;
 	
 	public MemoryAccess(Processor containingProcessor, EX_MA_LatchType eX_MA_Latch, MA_RW_LatchType mA_RW_Latch)
@@ -18,11 +18,11 @@ public class MemoryAccess {
 	
 	public void performOperations()
 	{
-		controlunit.opcode="";
-		controlunit.rs1="";
-		controlunit.rs2="";
-		controlunit.rd="";
-		controlunit.Imm = "";
+		cu.opcode="";
+		cu.rs1="";
+		cu.rs2="";
+		cu.rd="";
+		cu.Imm = "";
 	}
 	
 	public void setEnableDisable()
@@ -41,18 +41,18 @@ public class MemoryAccess {
 			int load_result=0;
 			
 			int instruction = EX_MA_Latch.getInstruction();
-			controlunit.setInstruction(instruction);
+			cu.setInstruction(instruction);
 			MA_RW_Latch.setInstruction(instruction);
 			
-			if(controlunit.opcode.equals("11101")) {
+			if(cu.opcode.equals("11101")) {
 				isEND = true;
 			}
 				
 			
-			if(controlunit.isSt()){
+			if(cu.isSt()){
 				containingProcessor.getMainMemory().setWord( alures, op2);
 			}
-			else if (controlunit.opcode.equals("10110")){
+			else if (cu.opcode.equals("10110")){
 	
 				load_result = containingProcessor.getMainMemory().getWord(alures);
 				MA_RW_Latch.setLoadResult(load_result);

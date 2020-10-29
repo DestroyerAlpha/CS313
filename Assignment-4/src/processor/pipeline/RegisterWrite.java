@@ -7,7 +7,7 @@ public class RegisterWrite {
 	Processor containingProcessor;
 	MA_RW_LatchType MA_RW_Latch;
 	IF_EnableLatchType IF_EnableLatch;
-	ControlUnit controlunit = new ControlUnit();
+	ControlUnit cu = new ControlUnit();
 	
 	public RegisterWrite(Processor containingProcessor, MA_RW_LatchType mA_RW_Latch, IF_EnableLatchType iF_EnableLatch)
 	{
@@ -19,11 +19,11 @@ public class RegisterWrite {
 	public void performOperations()
 	{
 		IF_EnableLatch.setIF_enable(true);
-		controlunit.opcode="";
-		controlunit.rs1="";
-		controlunit.rs2="";
-		controlunit.rd="";
-		controlunit.Imm = "";
+		cu.opcode="";
+		cu.rs1="";
+		cu.rs2="";
+		cu.rd="";
+		cu.Imm = "";
 	}
 	
 	public void setEnableDisable()
@@ -44,13 +44,13 @@ public class RegisterWrite {
 		if(MA_RW_Latch.isRW_enable())
 		{
 			int instruction = MA_RW_Latch.getInstruction();
-			controlunit.setInstruction(instruction);
-			if(controlunit.opcode.equals("11101"))
+			cu.setInstruction(instruction);
+			if(cu.opcode.equals("11101"))
 				setEnableDisable1();
 			else 
 			{
 				int result;
-				switch(controlunit.opcode)
+				switch(cu.opcode)
 				{
 					case "10110":
 						result = MA_RW_Latch.getLoadResult();
@@ -60,7 +60,7 @@ public class RegisterWrite {
 						break;
 				}
 				int rd = MA_RW_Latch.getrd();
-				if(controlunit.isRegisterWriteBack())
+				if(cu.isRegisterWriteBack())
 				{
 					containingProcessor.getRegisterFile().setValue(rd, result);
 				}

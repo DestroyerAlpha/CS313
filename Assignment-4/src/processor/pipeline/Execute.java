@@ -8,7 +8,7 @@ public class Execute {
 	OF_EX_LatchType OF_EX_Latch;
 	EX_MA_LatchType EX_MA_Latch;
 	EX_IF_LatchType EX_IF_Latch;
-	ControlUnit controlunit = new ControlUnit();
+	ControlUnit cu = new ControlUnit();
 	boolean isEND = false;
 	int operand1;
 	int operand2;
@@ -75,17 +75,17 @@ public class Execute {
 			int isbranchtaken =0,branchPC=0;
 			
 			int instruction = OF_EX_Latch.getInstruction();
-			controlunit.setInstruction(instruction);
+			cu.setInstruction(instruction);
 			EX_MA_Latch.setInstruction(instruction);
 			
 			int op1 = OF_EX_Latch.getoperand1() ;
 			int op2 =  OF_EX_Latch.getoperand2();
 
-			String opcode=controlunit.opcode;
+			String opcode=cu.opcode;
 			int imm =	OF_EX_Latch.getimmx();
 
 			int alures=0;
-			if(controlunit.isimm() || opcode.equals("11101")){
+			if(cu.isimm() || opcode.equals("11101")){
 				setop1(op1);
 				setop2(imm);
 				alures=eval(opcode);
@@ -106,7 +106,7 @@ public class Execute {
 
 			}
 			else{
-				switch(Integer.parseInt(controlunit.opcode, 2)){
+				switch(Integer.parseInt(cu.opcode, 2)){
 					case 24:{
 						isbranchtaken= 1;
 						branchPC = OF_EX_Latch.getbranchtarget();
@@ -172,11 +172,11 @@ public class Execute {
 			OF_EX_Latch.setEX_enable(false);
 		}
 		else {
-			controlunit.opcode="";
-			controlunit.rs1="";
-			controlunit.rs2="";
-			controlunit.rd="";
-			controlunit.Imm = "";
+			cu.opcode="";
+			cu.rs1="";
+			cu.rs2="";
+			cu.rd="";
+			cu.Imm = "";
 		}
 		
 	}
