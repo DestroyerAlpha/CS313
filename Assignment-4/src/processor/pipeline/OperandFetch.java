@@ -8,15 +8,15 @@ public class OperandFetch {
 	IF_OF_LatchType IF_OF_Latch;
 	OF_EX_LatchType OF_EX_Latch;
 	ControlUnit controlunit = new ControlUnit();
-	boolean is_end = false;
-	public boolean r3(String op) {
+	boolean isEND = false;
+	public boolean isR3(String op) {
 		if(op.equals("")) return false;
 		if(op.charAt(4)=='0' && !(op.charAt(0)=='1' && op.charAt(1)=='1') && !op.equals("10110"))
 			return true;
 		else return false;
 		
 	}
-	public boolean r2i(String op) {
+	public boolean isR2I(String op) {
 		if(op.equals("")) return false;
 		if( ((op.charAt(4)=='1') || op.equals("10110") || op.equals("11010") ||op.equals("11100") ) && !op.equals("11101"))
 			return true;
@@ -24,7 +24,7 @@ public class OperandFetch {
 		
 	}
 	
-	public boolean r2i1(String op) {
+	public boolean isR2I1(String op) {
 		if(op.equals("")) return false;
 		if(op.charAt(4)=='1'  && !(op.charAt(0)=='1' && op.charAt(1)=='1') && !op.equals("10111"))
 			return true;
@@ -32,7 +32,7 @@ public class OperandFetch {
 		
 	}
 	
-	public boolean r2i2(String op) {//load or store
+	public boolean isR2I2(String op) {//load or store
 		if(op.equals("")) return false;
 		if((op.equals("10110") || op.equals("10111")))
 			return true;
@@ -40,7 +40,7 @@ public class OperandFetch {
 		
 	}
 	
-	public boolean r2i3(String op) { // branch
+	public boolean isR2I3(String op) { // branch
 		if(op.equals("")) return false;
 		if((op.charAt(0)=='1' && op.charAt(1)=='1')&&!op.equals("11000")&&!op.equals("11101")  )
 			return true;
@@ -76,7 +76,7 @@ public class OperandFetch {
 	
 	public void performOF()
 	{
-		if(IF_OF_Latch.isOF_enable() && !is_end)
+		if(IF_OF_Latch.isOF_enable() && !isEND)
 		{
 			//TODO
 			
@@ -97,16 +97,16 @@ public class OperandFetch {
 			opcode=instructionString.substring(0,5);
 			
 			if (instructionString.substring(0,5).equals("11101"))
-				is_end = true;
+				isEND = true;
 			
-			switch(String.valueOf(r3(opcode)))
+			switch(String.valueOf(isR3(opcode)))
 			{
 				case "true":
 					rd=instructionString.substring(15,20);
 					immx=instructionString.substring(20,32);
 					break;
 			}
-			switch(String.valueOf(r2i(opcode)))
+			switch(String.valueOf(isR2I(opcode)))
 			{
 				case "true":
 					rd=instructionString.substring(10,15);
@@ -136,7 +136,7 @@ public class OperandFetch {
 			
 			
 			boolean conflict = false;
-			switch(String.valueOf(r3(opcode)))
+			switch(String.valueOf(isR3(opcode)))
 			{
 				case "true":
 					if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
@@ -147,7 +147,7 @@ public class OperandFetch {
 							conflict = true;
 						}
 					}
-					if(r3(containingProcessor.getEXUnit().controlunit.opcode) || r2i1(containingProcessor.getEXUnit().controlunit.opcode)) {
+					if(isR3(containingProcessor.getEXUnit().controlunit.opcode) || isR2I1(containingProcessor.getEXUnit().controlunit.opcode)) {
 						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
 							conflict = true;
 						}
@@ -155,7 +155,7 @@ public class OperandFetch {
 								conflict = true;
 						}//System.out.println("*********EX1***********");
 					}
-					if(r3(containingProcessor.getMAUnit().controlunit.opcode) || r2i1(containingProcessor.getMAUnit().controlunit.opcode)) {
+					if(isR3(containingProcessor.getMAUnit().controlunit.opcode) || isR2I1(containingProcessor.getMAUnit().controlunit.opcode)) {
 						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
 							conflict = true;
 						}
@@ -163,7 +163,7 @@ public class OperandFetch {
 							conflict = true;
 						}//System.out.println("*********MA1***********");
 					}
-					if(r3(containingProcessor.getRWUnit().controlunit.opcode) || r2i1(containingProcessor.getRWUnit().controlunit.opcode)) {
+					if(isR3(containingProcessor.getRWUnit().controlunit.opcode) || isR2I1(containingProcessor.getRWUnit().controlunit.opcode)) {
 						if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
 							conflict = true;
 						}
@@ -189,7 +189,7 @@ public class OperandFetch {
 					}
 			}
 			
-			switch(String.valueOf(r2i1(opcode)))
+			switch(String.valueOf(isR2I1(opcode)))
 			{
 				case "true":
 					if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
@@ -198,18 +198,18 @@ public class OperandFetch {
 						}
 					}
 					//System.out.println("PPPPPPPPP"+containingProcessor.getEXUnit().controlunit.opcode);
-					if(r3(containingProcessor.getEXUnit().controlunit.opcode) || r2i1(containingProcessor.getEXUnit().controlunit.opcode)) {
+					if(isR3(containingProcessor.getEXUnit().controlunit.opcode) || isR2I1(containingProcessor.getEXUnit().controlunit.opcode)) {
 							
 						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
 							conflict = true;
 						}//System.out.println("*********EX3***********");
 					}
-					if(r3(containingProcessor.getMAUnit().controlunit.opcode) || r2i1(containingProcessor.getMAUnit().controlunit.opcode)) {
+					if(isR3(containingProcessor.getMAUnit().controlunit.opcode) || isR2I1(containingProcessor.getMAUnit().controlunit.opcode)) {
 						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
 							conflict = true;
 						}//System.out.println("*********MA3***********");
 					}
-					if(r3(containingProcessor.getRWUnit().controlunit.opcode) || r2i1(containingProcessor.getRWUnit().controlunit.opcode)) {
+					if(isR3(containingProcessor.getRWUnit().controlunit.opcode) || isR2I1(containingProcessor.getRWUnit().controlunit.opcode)) {
 						if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
 							conflict = true;
 						}//System.out.println("*********RW2***********");
@@ -229,7 +229,7 @@ public class OperandFetch {
 					}
 			}
 			
-			switch(String.valueOf(r2i3(opcode)))
+			switch(String.valueOf(isR2I3(opcode)))
 			{
 				case "true":
 					if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
@@ -240,7 +240,7 @@ public class OperandFetch {
 							conflict = true;
 						}
 					}
-					if(r3(containingProcessor.getEXUnit().controlunit.opcode) || r2i1(containingProcessor.getEXUnit().controlunit.opcode)) {
+					if(isR3(containingProcessor.getEXUnit().controlunit.opcode) || isR2I1(containingProcessor.getEXUnit().controlunit.opcode)) {
 						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
 							conflict = true;
 						}
@@ -248,7 +248,7 @@ public class OperandFetch {
 								conflict = true;
 						}//System.out.println("*********EX5***********");
 					}
-					if(r3(containingProcessor.getMAUnit().controlunit.opcode) || r2i1(containingProcessor.getMAUnit().controlunit.opcode)) {
+					if(isR3(containingProcessor.getMAUnit().controlunit.opcode) || isR2I1(containingProcessor.getMAUnit().controlunit.opcode)) {
 						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
 							conflict = true;
 						}
@@ -256,7 +256,7 @@ public class OperandFetch {
 							conflict = true;
 						}//System.out.println("*********MA5***********"+conflict);
 					}
-					if(r3(containingProcessor.getRWUnit().controlunit.opcode) || r2i1(containingProcessor.getRWUnit().controlunit.opcode)) {
+					if(isR3(containingProcessor.getRWUnit().controlunit.opcode) || isR2I1(containingProcessor.getRWUnit().controlunit.opcode)) {
 						if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
 							conflict = true;
 						}
@@ -282,114 +282,105 @@ public class OperandFetch {
 					}
 			}
 			
-			switch(String.valueOf(r2i2(opcode)))
+			if(isR2I2(opcode))
 			{
-				case "true":
-					switch(opcode)
+					if(opcode.equals("10110"))
 					{
-						case "10110":
 							if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
 								if(rs1.equals("11111")){
-									conflict = true;
+									conflict = true;   //Loading remainder of division before it is computed in EX
 								}
 							}
-							if(r3(containingProcessor.getEXUnit().controlunit.opcode) || r2i1(containingProcessor.getEXUnit().controlunit.opcode)) {
+							if(isR3(containingProcessor.getEXUnit().controlunit.opcode) || isR2I1(containingProcessor.getEXUnit().controlunit.opcode)) {
 								if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
-									conflict = true;
-								}//System.out.println("*********EX7***********");
+									conflict = true;         //Arithemetic operations in EX stage being loaded before computing
+								}
 							}
-							if(r3(containingProcessor.getMAUnit().controlunit.opcode) || r2i1(containingProcessor.getMAUnit().controlunit.opcode)) {
+							if(isR3(containingProcessor.getMAUnit().controlunit.opcode) || isR2I1(containingProcessor.getMAUnit().controlunit.opcode)) {
 								if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
-									conflict = true;
-								}//System.out.println("*********MA7***********");
+									conflict = true;    //Arithemetic operations in MA stage being loaded before computing
+								}
 							}
-							if(r3(containingProcessor.getRWUnit().controlunit.opcode) || r2i1(containingProcessor.getRWUnit().controlunit.opcode)) {
+							if(isR3(containingProcessor.getRWUnit().controlunit.opcode) || isR2I1(containingProcessor.getRWUnit().controlunit.opcode)) {
 								if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
-									conflict = true;
-								}//System.out.println("*********RW4***********");
+									conflict = true;        //Arithemetic operations in RW stage being loaded before computing
+								}
 							}
 							if(containingProcessor.getEXUnit().controlunit.opcode.equals("10110")) {
 								if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
-									conflict = true;
-								}//System.out.println("*********EX8***********");
+									conflict = true;        //Store instruction in EX being loaded
+								}
 							}
 							if(containingProcessor.getMAUnit().controlunit.opcode.equals("10110")) {
 								if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
-									conflict = true;
-								}//System.out.println("*********MA8***********");
+									conflict = true;     //Store instruction in MA being Loaded
+								}
 							}
 							if(containingProcessor.getEXUnit().controlunit.opcode.equals("10111")) {
 								if((Integer.parseInt(rs1,2) + convertbin(immx) )== 
 												Integer.parseInt((containingProcessor.getEXUnit().controlunit.rd),2) +
 												convertbin(containingProcessor.getEXUnit().controlunit.Imm) ) {
-									conflict = true;
-								}//System.out.println("*********EX9***********");
+									conflict = true;          //Loading in same location
+								}
 							}
 							if(containingProcessor.getMAUnit().controlunit.opcode.equals("10111")) {
 								if((Integer.parseInt(rs1,2) + convertbin(immx) )== 
 												Integer.parseInt((containingProcessor.getMAUnit().controlunit.rd),2) +
 												convertbin(containingProcessor.getMAUnit().controlunit.Imm) ) {
-									conflict = true;
-								}//System.out.println("*********MA9***********");
+									conflict = true;      //Loading in same location
+								}
 							}
 					}
-							
 			}
-			
-			switch(String.valueOf(r2i2(opcode)))
+			else if(opcode.equals("10111"))
 			{
-				case "true":
-					switch(opcode)
-					{
-						case "10111":
-							if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
-								if(rs1.equals("11111")){
-									conflict = true;
-								}
-								if(rd.equals("11111")){
-									conflict = true;
-								}
-							}
-							if(r3(containingProcessor.getEXUnit().controlunit.opcode) || r2i1(containingProcessor.getEXUnit().controlunit.opcode)) {
-								if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
-									conflict = true;
-								}
-								if(rd.equals(containingProcessor.getEXUnit().controlunit.rd)){
-										conflict = true;
-								}//System.out.println("*********EX10***********");
-							}
-							if(r3(containingProcessor.getMAUnit().controlunit.opcode) || r2i1(containingProcessor.getMAUnit().controlunit.opcode)) {
-								if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
-									conflict = true;
-								}
-								if(rd.equals(containingProcessor.getMAUnit().controlunit.rd)){
-									conflict = true;
-								}//System.out.println("*********MA10***********");
-							}
-							if(r3(containingProcessor.getRWUnit().controlunit.opcode) || r2i1(containingProcessor.getRWUnit().controlunit.opcode)) {
-								if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
-									conflict = true;
-								}
-								if(rd.equals(containingProcessor.getRWUnit().controlunit.rd)){
-									conflict = true;
-								}//System.out.println("*********RW5***********");
-							}
-							if(containingProcessor.getEXUnit().controlunit.opcode.equals("10110")) {
-								if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
-									conflict = true;
-								}
-								if(rd.equals(containingProcessor.getEXUnit().controlunit.rd)){
-									conflict = true;
-								}//System.out.println("*********EX11***********");
-							}
-							if(containingProcessor.getMAUnit().controlunit.opcode.equals("10110")) {
-								if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
-									conflict = true;
-								}
-								if(rd.equals(containingProcessor.getMAUnit().controlunit.rd)){
-									conflict = true;
-								}//System.out.println("*********MA11***********");
-							}
+					if(containingProcessor.getEXUnit().controlunit.opcode.equals("00111") || containingProcessor.getEXUnit().controlunit.opcode.equals("00110")) {
+						if(rs1.equals("11111")){
+							conflict = true;
+						}                                  //Storing R31 before division is completed
+						if(rd.equals("11111")){
+							conflict = true;
+						}
+					}
+					if(isR3(containingProcessor.getEXUnit().controlunit.opcode) || isR2I1(containingProcessor.getEXUnit().controlunit.opcode)) {
+						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
+							conflict = true;
+						}
+						if(rd.equals(containingProcessor.getEXUnit().controlunit.rd)){
+								conflict = true;
+						}         //Storing arithemetic results before they are computed
+					}
+					if(isR3(containingProcessor.getMAUnit().controlunit.opcode) || isR2I1(containingProcessor.getMAUnit().controlunit.opcode)) {
+						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
+							conflict = true;
+						}
+						if(rd.equals(containingProcessor.getMAUnit().controlunit.rd)){
+							conflict = true;
+						}         //Storing arithemetic results before they are computed
+					}
+					if(isR3(containingProcessor.getRWUnit().controlunit.opcode) || isR2I1(containingProcessor.getRWUnit().controlunit.opcode)) {
+						if(rs1.equals(containingProcessor.getRWUnit().controlunit.rd)){
+							conflict = true;
+						}
+						if(rd.equals(containingProcessor.getRWUnit().controlunit.rd)){
+							conflict = true;
+						}         //Storing arithemetic results before they are computed
+					}
+					if(containingProcessor.getEXUnit().controlunit.opcode.equals("10110")) {
+						if(rs1.equals(containingProcessor.getEXUnit().controlunit.rd)){
+							conflict = true;
+						}
+						if(rd.equals(containingProcessor.getEXUnit().controlunit.rd)){
+							conflict = true;
+						}         //Storing before load is completed
+					}
+					if(containingProcessor.getMAUnit().controlunit.opcode.equals("10110")) {
+						if(rs1.equals(containingProcessor.getMAUnit().controlunit.rd)){
+							conflict = true;
+						}
+						if(rd.equals(containingProcessor.getMAUnit().controlunit.rd)){
+							conflict = true;
+						}              ////Storing before load is completed
 					}
 			}
 			boolean x = !conflict;
@@ -399,6 +390,7 @@ public class OperandFetch {
 					OF_EX_Latch.setInstruction(instruction);
 					OF_EX_Latch.setimmx(convertbin(immx));
 					OF_EX_Latch.setbranchtarget(convertbin(immx) + containingProcessor.getRegisterFile().getProgramCounter()-1);
+					//containingProcessor.getcontrol_unit().setopcode(instructionString.substring(0,5));
 					OF_EX_Latch.setoperand1(operand1);
 					OF_EX_Latch.setoperand2(operand2);
 					OF_EX_Latch.setrd(Integer.parseInt(rd,2));
@@ -407,7 +399,7 @@ public class OperandFetch {
 					OF_EX_Latch.setEX_enable(true);
 					break;
 				default:
-					Statistics.data_hazard++;
+					Statistics.datahaz++;
 					containingProcessor.getIFUnit().conflict = true ;
 					break;
 			}

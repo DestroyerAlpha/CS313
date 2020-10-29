@@ -8,9 +8,59 @@ public class Execute {
 	OF_EX_LatchType OF_EX_Latch;
 	EX_MA_LatchType EX_MA_Latch;
 	EX_IF_LatchType EX_IF_Latch;
-	ALU alu=new ALU();
 	ControlUnit controlunit = new ControlUnit();
-	boolean is_end = false;
+	boolean isEND = false;
+	int operand1;
+	int operand2;
+
+	public void setop1(int o1){
+		operand1=o1;
+	}
+	public void setop2(int o2){
+		operand2=o2;
+	}
+	public int eval(String opcode){
+		int res=0;
+		
+		switch(Integer.parseInt(opcode, 2)) {
+			case 0:{res=operand1+operand2;break;}
+			case 1:{res=operand1+operand2;break;}
+			case 2:{res=operand1-operand2;break;}
+			case 3:{res=operand1-operand2;break;}
+			case 4:{res=operand1*operand2;break;}
+			case 5:{res=operand1*operand2;break;}
+			case 6:{res=operand1/operand2;break;}
+			case 7:{res=operand1/operand2;break;}
+			case 8:{res=operand1 & operand2;break;}
+			case 9:{res=operand1 & operand2;break;}
+			case 10:{res=operand1 | operand2;break;}
+			case 11:{res=operand1 |operand2;break;}
+			case 12:{res=operand1 ^ operand2;break;}
+			case 13:{res=operand1 ^ operand2;break;}
+			case 14:{
+				if(operand1<operand2){ res = 1;}
+				else{res = 0;}
+				break;
+			}
+			case 15:{
+				if(operand1<operand2){ res = 1;}
+				else{res = 0;}
+				break;
+			}
+			case 16:{res=operand1 << operand2;break;}
+			case 17:{res=operand1 << operand2;break;}
+			case 18:{res=operand1 >>> operand2;break;}
+			case 19:{res=operand1 >>>operand2;break;}
+			case 20:{res=operand1 >> operand2;break;}
+			case 21:{res=operand1 >> operand2;break;}
+			case 22:{res=operand1 + operand2;break;}
+			case 23:{res=operand1 + operand2;break;}
+		
+		
+		}
+		return res;
+
+	}
 	public Execute(Processor containingProcessor, OF_EX_LatchType oF_EX_Latch, EX_MA_LatchType eX_MA_Latch, EX_IF_LatchType eX_IF_Latch)
 	{
 		this.containingProcessor = containingProcessor;
@@ -21,7 +71,7 @@ public class Execute {
 	
 	public void performEX()
 	{
-		if(OF_EX_Latch.isEX_enable() && !is_end){
+		if(OF_EX_Latch.isEX_enable() && !isEND){
 			int isbranchtaken =0,branchPC=0;
 			
 			int instruction = OF_EX_Latch.getInstruction();
@@ -36,9 +86,9 @@ public class Execute {
 
 			int alures=0;
 			if(controlunit.isimm() || opcode.equals("11101")){
-				alu.setop1(op1);
-				alu.setop2(imm);
-				alures=alu.eval(opcode);
+				setop1(op1);
+				setop2(imm);
+				alures=eval(opcode);
 				if(opcode.equals("00111")) {containingProcessor.getRegisterFile().setValue(31, op1%imm);}
 				EX_MA_Latch.setop2(op2);
 				EX_MA_Latch.setaluRes(alures);
@@ -47,9 +97,9 @@ public class Execute {
 				
 			}
 			else if(!opcode.equals("11000") && !opcode.equals("11001") && !opcode.equals("11010") && !opcode.equals("11011") && !opcode.equals("11100") && !opcode.equals("11101")){
-				alu.setop1(op1);
-				alu.setop2(op2);
-				alures=alu.eval(opcode);
+				setop1(op1);
+				setop2(op2);
+				alures=eval(opcode);
 				if(opcode.equals("00110")) containingProcessor.getRegisterFile().setValue(31, op1%op2);
 				EX_MA_Latch.setaluRes(alures);
 				EX_MA_Latch.setMA_enable(true);
@@ -92,7 +142,7 @@ public class Execute {
 						break;
 					}
 					case 29:{
-						is_end = true;
+						isEND = true;
 						EX_MA_Latch.setMA_enable(true);
 					}
 				}
@@ -101,19 +151,19 @@ public class Execute {
 			switch(isbranchtaken)
 			{
 				case 1:
-					if(containingProcessor.getIFUnit().is_end == true) {
-							Statistics.control_hazard +=1 ;
+					if(containingProcessor.getIFUnit().isEND == true) {
+							Statistics.controlhaz +=1 ;
 					}
 					else {
-						Statistics.control_hazard +=2 ;
+						Statistics.controlhaz +=2 ;
 					}
 					EX_IF_Latch.setisbranchtaken();
 					EX_IF_Latch.setbranchtarget(branchPC);
 					EX_IF_Latch.setIF_enable(true);
 					containingProcessor.getOFUnit().IF_OF_Latch.OF_enable=false;
-					containingProcessor.getOFUnit().is_end = false;
+					containingProcessor.getOFUnit().isEND = false;
 					containingProcessor.getIFUnit().IF_EnableLatch.IF_enable = false;
-					containingProcessor.getIFUnit().is_end = false;
+					containingProcessor.getIFUnit().isEND = false;
 					break;
 				default:
 					EX_MA_Latch.setrd(OF_EX_Latch.getrd());

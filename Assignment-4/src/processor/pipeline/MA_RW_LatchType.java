@@ -33,7 +33,7 @@ public class MA_RW_LatchType {
 		return alures;
 	}
 
-	public int getload_result(){
+	public int getLoadResult(){
 		return load_result;
 	}
 	
