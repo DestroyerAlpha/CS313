@@ -16,7 +16,7 @@ public class RegisterWrite {
 		this.IF_EnableLatch = iF_EnableLatch;
 	}
 	
-	public void performOperations()
+	public void bubble()
 	{
 		IF_EnableLatch.setIF_enable(true);
 		cu.opcode="";
@@ -71,7 +71,7 @@ public class RegisterWrite {
 
 		}
 		else 
-			performOperations();
+			bubble();
 	}
 
 }

@@ -84,15 +84,13 @@ public class ControlUnit {
 			return true;
 	}
 	public boolean isimm(){
-		//System.out.println(opcode.equals("10110"));
-
 		if (( opcode.charAt(4)=='1'|| opcode.equals("10110")) && !( opcode.equals("11101") || opcode.equals("11001") || opcode.equals("11011"))){
 
 			return true;
 		}
 		else return false ;
 	}
-	public boolean isSt(){
+	public boolean isStore(){
 		if(opcode.equals("10111")){
 				return true;
 		}

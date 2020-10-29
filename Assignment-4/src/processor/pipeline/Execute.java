@@ -12,7 +12,14 @@ public class Execute {
 	boolean isEND = false;
 	int operand1;
 	int operand2;
-
+	public void bubble()
+	{
+		cu.opcode="";
+		cu.rs1="";
+		cu.rs2="";
+		cu.rd="";
+		cu.Imm = "";
+	}
 	public void setop1(int o1){
 		operand1=o1;
 	}
@@ -62,7 +69,8 @@ public class Execute {
 	public void performEX()
 	{
 		if(OF_EX_Latch.isEX_enable() && !isEND){
-			int isbranchtaken =0,branchPC=0;
+			boolean is_branch_taken = false;
+			int branchPC=0;
 			int instruction = OF_EX_Latch.getInstruction();
 			cu.setInstruction(instruction);
 			EX_MA_Latch.setInstruction(instruction);
@@ -82,8 +90,6 @@ public class Execute {
 				EX_MA_Latch.setop2(op2);
 				EX_MA_Latch.setFinal_Result(Final_result);
 				EX_MA_Latch.setMA_enable(true);
-				
-				
 			}
 			else if(!opcode.equals("11000") && !opcode.equals("11001") && !opcode.equals("11010") && !opcode.equals("11011") && !opcode.equals("11100") && !opcode.equals("11101")){
 				setop1(op1);
@@ -97,35 +103,35 @@ public class Execute {
 			else{
 				switch(Integer.parseInt(cu.opcode, 2)){
 					case 24:{
-						isbranchtaken= 1;
+						is_branch_taken= true;
 						branchPC = OF_EX_Latch.getbranchtarget();
 						break;
 					}
 					case 25:{
 						
 						if(op1 == op2){
-							isbranchtaken=1;
+							is_branch_taken=true;
 							branchPC = OF_EX_Latch.getbranchtarget();
 						}
 						break;
 					}
 					case 26:{
 						if(op1 != op2){
-							isbranchtaken= 1;
+							is_branch_taken = true;
 							branchPC = OF_EX_Latch.getbranchtarget();
 						}
 						break;
 					}
 					case 27:{
 						if(op1 <op2){
-							isbranchtaken= 1;
+							is_branch_taken = true;
 							branchPC = OF_EX_Latch.getbranchtarget();
 						}
 						break;
 					}
 					case 28:{
 						if(op1>op2){
-							isbranchtaken= 1;
+							is_branch_taken = true;
 							branchPC = OF_EX_Latch.getbranchtarget();
 						}
 						break;
@@ -137,35 +143,32 @@ public class Execute {
 				}
 				
 			}
-			switch(isbranchtaken)
+			if(is_branch_taken)
 			{
-				case 1:
-					if(containingProcessor.getIFUnit().isEND == true) {
-							Statistics.controlhaz +=1 ;
-					}
-					else {
-						Statistics.controlhaz +=2 ;
-					}
-					EX_IF_Latch.setisbranchtaken();
-					EX_IF_Latch.setbranchtarget(branchPC);
-					EX_IF_Latch.setIF_enable(true);
-					containingProcessor.getOFUnit().IF_OF_Latch.OF_enable=false;
-					containingProcessor.getOFUnit().isEND = false;
-					containingProcessor.getIFUnit().IF_EnableLatch.IF_enable = false;
-					containingProcessor.getIFUnit().isEND = false;
-					break;
-				default:
+				if(!containingProcessor.getIFUnit().isEND)
+				{
+						Statistics.control_hazards +=2 ;
+				}
+				else
+				{
+					Statistics.control_hazards +=1;
+				}
+				EX_IF_Latch.setisBranchTaken();
+				EX_IF_Latch.setbranchtarget(branchPC);
+				EX_IF_Latch.setIF_enable(true);
+				containingProcessor.getOFUnit().IF_OF_Latch.OF_enable=false;
+				containingProcessor.getOFUnit().isEND = false;
+				containingProcessor.getIFUnit().IF_EnableLatch.IF_enable = false;
+				containingProcessor.getIFUnit().isEND = false;
+			}
+			else
+			{
 					EX_MA_Latch.setrd(OF_EX_Latch.getrd());
-					break;
 			}
 			OF_EX_Latch.setEX_enable(false);
 		}
 		else {
-			cu.opcode="";
-			cu.rs1="";
-			cu.rs2="";
-			cu.rd="";
-			cu.Imm="";
+			bubble();
 		}
 		
 	}
