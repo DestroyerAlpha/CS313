@@ -7,7 +7,7 @@ public class MemoryAccess {
 	EX_MA_LatchType EX_MA_Latch;
 	MA_RW_LatchType MA_RW_Latch;
 	ControlUnit controlunit = new ControlUnit();
-	boolean is_end = false;
+	boolean isEND = false;
 	
 	public MemoryAccess(Processor containingProcessor, EX_MA_LatchType eX_MA_Latch, MA_RW_LatchType mA_RW_Latch)
 	{
@@ -34,7 +34,7 @@ public class MemoryAccess {
 	
 	public void performMA()
 	{
-		if(EX_MA_Latch.isMA_enable() && !is_end) {
+		if(EX_MA_Latch.isMA_enable() && !isEND) {
 			//System.out.println("MA:"+"\n");
 			int op2 = EX_MA_Latch.getop2();
 			int alures = EX_MA_Latch.getaluRes();
@@ -45,7 +45,7 @@ public class MemoryAccess {
 			MA_RW_Latch.setInstruction(instruction);
 			
 			if(controlunit.opcode.equals("11101")) {
-				is_end = true;
+				isEND = true;
 			}
 				
 			

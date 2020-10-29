@@ -1,6 +1,7 @@
 package processor.pipeline;
 
 import generic.Simulator;
+import generic.Statistics;
 import processor.Clock;
 import processor.Processor;
 
@@ -11,7 +12,7 @@ public class InstructionFetch {
 	IF_OF_LatchType IF_OF_Latch;
 	EX_IF_LatchType EX_IF_Latch;
 	boolean conflict = false;
-	boolean is_end = false;
+	boolean isEND = false;
 	
 	public InstructionFetch(Processor containingProcessor, IF_EnableLatchType iF_EnableLatch, IF_OF_LatchType iF_OF_Latch, EX_IF_LatchType eX_IF_Latch)
 	{
@@ -29,7 +30,8 @@ public class InstructionFetch {
 	
 	public void performIF()
 	{
-			if(IF_EnableLatch.isIF_enable() && !is_end)
+			
+			if(IF_EnableLatch.isIF_enable() && !isEND)
 			{
 				if(EX_IF_Latch.IF_enable){
 					if(EX_IF_Latch.isBranchTaken){
@@ -37,7 +39,7 @@ public class InstructionFetch {
 					}
 					EX_IF_Latch.IF_enable=false;
 				}
-			
+				Statistics.setNumberOfInstructions(Statistics.numberOfInstructions+1);
 				int currentPC = containingProcessor.getRegisterFile().getProgramCounter();
 				int newInstruction = containingProcessor.getMainMemory().getWord(currentPC);
 				
@@ -54,7 +56,7 @@ public class InstructionFetch {
 				{
 					case "true":
 						if(instructionString.substring(0,5).equals("11101")) {
-							is_end = true;
+							isEND = true;
 						}
 						IF_OF_Latch.setInstruction(newInstruction);
 						containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);

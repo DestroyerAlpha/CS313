@@ -1,17 +1,19 @@
 package main;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import configuration.Configuration;
 import generic.Misc;
-import generic.Statistics;
+//import generic.Statistics;
 import processor.Processor;
 import processor.memorysystem.MainMemory;
 import processor.pipeline.RegisterFile;
 import generic.Simulator;
+import generic.Statistics;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		if(args.length != 3)
 		{
 			Misc.printErrorAndExit("usage: java -jar <path-to-jar-file> <path-to-config-file> <path-to-stat-file> <path-to-object-file>\n");
