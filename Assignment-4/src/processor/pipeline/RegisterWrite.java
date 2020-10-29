@@ -53,14 +53,14 @@ public class RegisterWrite {
 				switch(controlunit.opcode)
 				{
 					case "10110":
-						result = MA_RW_Latch.getldres();
+						result = MA_RW_Latch.getLoadResult();
 						break;
 					default:
 						result = MA_RW_Latch.getalures();
 						break;
 				}
 				int rd = MA_RW_Latch.getrd();
-				if(controlunit.isWb())
+				if(controlunit.isRegisterWriteBack())
 				{
 					containingProcessor.getRegisterFile().setValue(rd, result);
 				}

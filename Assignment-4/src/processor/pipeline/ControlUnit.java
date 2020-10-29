@@ -3,14 +3,14 @@ package processor.pipeline;
 public class ControlUnit {
 	int instruction;
 	String opcode="",rs1="",rs2="",rd="",Imm = "";
-	public boolean r3(String op) {
+	public boolean isR3(String op) {
 		if(op.equals("")) return false;
 		if(op.charAt(4)=='0' && !(op.charAt(0)=='1' && op.charAt(1)=='1') && !op.equals("10110"))
 			return true;
 		else return false;
 		
 	}
-	public boolean r2i(String op) {
+	public boolean isR2I(String op) {
 		if(op.equals("")) return false;
 		if( ((op.charAt(4)=='1') || op.equals("10110") || op.equals("11010") ||op.equals("11100") ) && !op.equals("11101"))
 			return true;
@@ -37,12 +37,12 @@ public class ControlUnit {
 		rs1 = instructionString.substring(5,10);
 		rs2 = instructionString.substring(10,15);
 		opcode=instructionString.substring(0,5);
-		switch(String.valueOf(r3(opcode)))
+		switch(String.valueOf(isR3(opcode)))
 		{
 			case "true":
 			rd=instructionString.substring(15,20);
 		}
-		switch(String.valueOf(r2i(opcode)))
+		switch(String.valueOf(isR2I(opcode)))
 		{
 			case "true":
 			rd=instructionString.substring(10,15);
@@ -55,7 +55,7 @@ public class ControlUnit {
 			Imm=instructionString.substring(10,32);
 		}
 	} 
-	public boolean isWb(){
+	public boolean isRegisterWriteBack(){
 		if ((opcode.charAt(0) == '1' && opcode.charAt(1) =='1') || (opcode.equals("10111"))){
 			return false;
 		}

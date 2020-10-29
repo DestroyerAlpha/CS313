@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 public class Statistics {
 	
 	// TODO add your statistics here
-	static int numberOfInstructions;
+	public static int numberOfInstructions = 0;
 	static int numberOfCycles;
 	public static int datahaz=0;
 	public static int controlhaz=0;
@@ -16,15 +16,14 @@ public class Statistics {
 	{
 		try
 		{
-			//System.out.println("PPP");
 			PrintWriter writer = new PrintWriter(statFile);
-			
-			//writer.println("Number of instructions executed = " + numberOfInstructions);
+			// TODO add code here to print statistics in the output file
+			writer.println("Number of instructions executed = " + numberOfInstructions);
 			writer.println("Number of cycles taken = " + numberOfCycles);
 			writer.println("Number of data hazards = " + datahaz);
 			writer.println("Number of control hazards = " + controlhaz);
 			
-			// TODO add code here to print statistics in the output file
+			
 			
 			writer.close();
 		}
