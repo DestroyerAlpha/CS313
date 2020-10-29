@@ -3,7 +3,7 @@ package processor.pipeline;
 public class EX_MA_LatchType {
 	
 	boolean MA_enable;
-	int aluResult;
+	int Final_Result;
 	int op2;
 	int rd;
 	int instruction;
@@ -23,8 +23,8 @@ public class EX_MA_LatchType {
 	public void setMA_enable(boolean mA_enable) {
 		MA_enable = mA_enable;
 	}
-	public void setaluRes(int a){
-		aluResult=a;
+	public void setFinal_Result(int a){
+		Final_Result=a;
 		
 	}
 	public void setrd(int r){
@@ -35,8 +35,8 @@ public class EX_MA_LatchType {
 		return this.rd;
 		
 	}
-	public int getaluRes(){
-		return aluResult;
+	public int getFinal_Result(){
+		return Final_Result;
 	}
 	public int getop2(){
 		return op2;
