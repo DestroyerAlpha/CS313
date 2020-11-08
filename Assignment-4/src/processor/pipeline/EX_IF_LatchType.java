@@ -9,7 +9,7 @@ public class EX_IF_LatchType {
 		isBranchTaken=false;
 		
 	}
-	public void setisbranchtaken(){
+	public void setisBranchTaken(){
 		isBranchTaken=true;
 	}
 	public void setbranchtarget(int b){

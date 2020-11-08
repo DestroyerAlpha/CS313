@@ -3,7 +3,7 @@ package processor.pipeline;
 public class MA_RW_LatchType {
 	
 	boolean RW_enable;
-	int alures;
+	int Final_result;
 	int load_result;
 	int rd;
 	int instruction ;
@@ -21,16 +21,16 @@ public class MA_RW_LatchType {
 		RW_enable = rW_enable;
 	}
 	
-	public void setalures(int al){
-		alures = al;
+	public void setFinal_result(int al){
+		Final_result = al;
 	}
 
 	public void setLoadResult(int ld){
 		load_result = ld;
 	}
 	
-	public int getalures(){
-		return alures;
+	public int getFinal_result(){
+		return Final_result;
 	}
 
 	public int getLoadResult(){
