@@ -90,7 +90,7 @@ public class ControlUnit {
 		}
 		else return false ;
 	}
-	public boolean isStore(){
+	public boolean isSt(){
 		if(opcode.equals("10111")){
 				return true;
 		}
