@@ -212,8 +212,10 @@ public class OperandFetch {
 					}
 				}
 			}
-			if(!conflict)
+			boolean x = !conflict;
+			switch(String.valueOf(x))
 			{
+				case "true":
 					OF_EX_Latch.setInstruction(instruction);
 					OF_EX_Latch.setimmx(convertbin(immx));
 					OF_EX_Latch.setbranchtarget(convertbin(immx) + containingProcessor.getRegisterFile().getProgramCounter()-1);
@@ -224,11 +226,11 @@ public class OperandFetch {
 					containingProcessor.getIFUnit().conflict = false ;
 					IF_OF_Latch.setOF_enable(false);
 					OF_EX_Latch.setEX_enable(true);
-			}
-			else
-			{
-					Statistics.data_hazards++;
+					break;
+				default:
+					Statistics.datahaz++;
 					containingProcessor.getIFUnit().conflict = true ;
+					break;
 			}
 
 		}

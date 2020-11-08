@@ -16,7 +16,7 @@ public class MemoryAccess {
 		this.MA_RW_Latch = mA_RW_Latch;
 	}
 	
-	public void bubble()
+	public void performOperations()
 	{
 		cu.opcode="";
 		cu.rs1="";
@@ -49,7 +49,7 @@ public class MemoryAccess {
 			}
 				
 			
-			if(cu.isStore()){
+			if(cu.isSt()){
 				containingProcessor.getMainMemory().setWord( Final_result, op2);
 			}
 			else if (cu.opcode.equals("10110")){
@@ -65,7 +65,7 @@ public class MemoryAccess {
 
 		}
 		else 
-			bubble();
+			performOperations();
 	
 	}
 
