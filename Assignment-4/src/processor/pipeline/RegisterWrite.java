@@ -16,7 +16,7 @@ public class RegisterWrite {
 		this.IF_EnableLatch = iF_EnableLatch;
 	}
 	
-	public void performOperations()
+	public void bubble()
 	{
 		IF_EnableLatch.setIF_enable(true);
 		cu.opcode="";
@@ -56,7 +56,7 @@ public class RegisterWrite {
 						result = MA_RW_Latch.getLoadResult();
 						break;
 					default:
-						result = MA_RW_Latch.getalures();
+						result = MA_RW_Latch.getFinal_result();
 						break;
 				}
 				int rd = MA_RW_Latch.getrd();
@@ -71,7 +71,7 @@ public class RegisterWrite {
 
 		}
 		else 
-			performOperations();
+			bubble();
 	}
 
 }

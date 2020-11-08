@@ -1,6 +1,5 @@
 package generic;
 import java.io.*;
-import java.util.*;
 
 import processor.Clock;
 import processor.Processor;
@@ -23,23 +22,10 @@ public class Simulator {
 	
 	static void loadProgram(String assemblyProgramFile) throws IOException
 	{
-		/*
-		 * TODO
-		 * 1. load the program into memory according to the program layout described
-		 *    in the ISA specification
-		 * 2. set PC to the address of the first instruction in the main
-		 * 3. set the following registers:
-		 *     x0 = 0
-		 *     x1 = 65535
-		 *     x2 = 65535
-		 */
-//		System.out.println(assemblyProgramFile);
-
 		try{
 			int i=0;
 			DataInputStream din = new DataInputStream(new FileInputStream(assemblyProgramFile)) ;
 			processor.getRegisterFile().setProgramCounter(din.readInt());
-//			System.out.println("dsfds");
 			while (din.available() > 0) {				
 				processor.getMainMemory().setWord(i,din.readInt());
 				i++ ;	
@@ -48,7 +34,6 @@ public class Simulator {
 			processor.getRegisterFile().setValue(0,0);
 			processor.getRegisterFile().setValue(1,65535);
 			processor.getRegisterFile().setValue(2,65535);
-//			System.out.println(processor.getMainMemory().getContentsAsString(0, 50));
 			din.close();
 			
 		}
@@ -62,10 +47,8 @@ public class Simulator {
 	
 	public static void simulate()
 	{
-		//System.out.println("sdsdsdsdsd");
 		while(simulationComplete == false)
 		{
-			//System.out.println("HI");
 			processor.getRWUnit().performRW();
 			processor.getMAUnit().performMA();
 			processor.getEXUnit().performEX();
@@ -74,10 +57,6 @@ public class Simulator {
 			Clock.incrementClock();
 			cycle++;
 		}
-		
-		// TODO
-		// set statistics
-		//Statistics.setNumberOfInstructions(cycle);
 		Statistics.setNumberOfCycles(cycle);
 	}
 	
