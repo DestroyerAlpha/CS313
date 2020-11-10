@@ -35,6 +35,16 @@ public class RegisterFile {
 		this.programCounter++;
 	}
 	
+	public StringBuilder changeFunction(StringBuilder sb)
+	{
+		for(int i = 1; i < 32; i++)
+		{
+			sb.append("x" + i + "\t: " + registerFile[i] + "\n");
+		}		
+		sb.append("\n");
+		return sb;
+	}
+	
 	public String getContentsAsString()
 	{
 		StringBuilder sb = new StringBuilder();
@@ -42,11 +52,7 @@ public class RegisterFile {
 		sb.append("PC" + "\t: " + programCounter + "\n\n");
 		
 		sb.append("x" + 0 + "\t: " + registerFile[0]+ "\n");		//%xo is always 0 [RISC V]
-		for(int i = 1; i < 32; i++)
-		{
-			sb.append("x" + i + "\t: " + registerFile[i] + "\n");
-		}		
-		sb.append("\n");
+		sb = changeFunction(sb);
 		return sb.toString();
 	}
 }

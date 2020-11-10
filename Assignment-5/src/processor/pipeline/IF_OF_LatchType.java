@@ -1,7 +1,7 @@
 package processor.pipeline;
 
 public class IF_OF_LatchType {
-	boolean OF_busy;
+	
 	boolean OF_enable;
 	int instruction;
 	
