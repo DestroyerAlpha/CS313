@@ -80,17 +80,15 @@ public class OperandFetch {
 			int operand1 = containingProcessor.getRegisterFile().getValue(Integer.parseInt(rp1, 2));
 			int operand2 = containingProcessor.getRegisterFile().getValue(Integer.parseInt(rp2, 2));
 
-			boolean conflict1 = false;
-			boolean conflict2 = false;
-			boolean conflict3 = false;
+			boolean conflict = false;
 			if (cu.isR3(opcode)) {
 				if (containingProcessor.getEXUnit().cu.opcode.equals("00111")
 						|| containingProcessor.getEXUnit().cu.opcode.equals("00110")) {
 					if (rs1.equals("11111")) {
-						conflict1 = true;
+						conflict = true;
 					} // Division before arithemtic operations
 					if (rs2.equals("11111")) {
-						conflict1 = true;
+						conflict = true;
 					}
 				}
 				if ((cu.isR3(containingProcessor.getEXUnit().cu.opcode)
@@ -258,16 +256,16 @@ public class OperandFetch {
 							|| (containingProcessor.getMAUnit().cu.opcode.equals("10110"))) {
 						if (rs1.equals(containingProcessor.getEXUnit().cu.rd)
 								|| rs1.equals(containingProcessor.getMAUnit().cu.rd)) {
-							conflict1 = true;
+							conflict = true;
 						}
 						if (rd.equals(containingProcessor.getEXUnit().cu.rd)
 								|| rd.equals(containingProcessor.getMAUnit().cu.rd)) {
-							conflict1 = true;
+							conflict = true;
 						} // Storing before load is completed
 					}
 				}
 			}
-			if (!conflict1 && !conflict2 && !conflict3) {
+			if (!conflict) {
 				OF_EX_Latch.setInstruction(instruction);
 				OF_EX_Latch.setimmx(convertbin(immx));
 				OF_EX_Latch.setbranchtarget(
@@ -279,12 +277,7 @@ public class OperandFetch {
 				OF_EX_Latch.setEX_enable(true);
 				containingProcessor.getIFUnit().IF_EnableLatch.setIF_enable(true);
 			} else {
-				if (conflict1 && containingProcessor.getEXUnit().OF_EX_Latch.isEX_enable())
-					Statistics.datahaz++;
-				else if (conflict2 && containingProcessor.getMAUnit().EX_MA_Latch.isMA_enable())
-					Statistics.datahaz++;
-				else if (conflict3 && containingProcessor.getRWUnit().MA_RW_Latch.isRW_enable())
-					Statistics.datahaz++;
+				Statistics.datahaz++;
 				containingProcessor.getIFUnit().IF_EnableLatch.setIF_enable(false);
 
 			}
