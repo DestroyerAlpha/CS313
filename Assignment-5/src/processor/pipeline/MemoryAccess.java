@@ -10,10 +10,10 @@ import generic.MemoryWriteEvent;
 import generic.Simulator;
 import processor.Clock;
 
-public class MemoryAccess {
+public class MemoryAccess implements Element{
 	Processor containingProcessor;
-	EX_MA_LatchType EX_MA_Latch;
-	MA_RW_LatchType MA_RW_Latch;
+	public EX_MA_LatchType EX_MA_Latch;
+	public MA_RW_LatchType MA_RW_Latch;
 	ControlUnit cu = new ControlUnit();
 	boolean isEND = false;
 
@@ -76,7 +76,7 @@ public class MemoryAccess {
 	public void handleEvent(Event e) {
 		// TODO Auto-generated method stub
 		MemoryResponseEvent event = (MemoryResponseEvent) e;
-		MA_RW_Latch.setldres(event.getValue());
+		MA_RW_Latch.setLoadResult(event.getValue());
 		EX_MA_Latch.setMA_busy(false);
 		MA_RW_Latch.setRW_enable(true);
 		EX_MA_Latch.setMA_enable(false);

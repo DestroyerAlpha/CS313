@@ -10,10 +10,10 @@ import processor.Clock;
 import generic.Element;
 import generic.Event;
 
-public class InstructionFetch {
+public class InstructionFetch implements Element{
 
 	Processor containingProcessor;
-	IF_EnableLatchType IF_EnableLatch;
+	public IF_EnableLatchType IF_EnableLatch;
 	IF_OF_LatchType IF_OF_Latch;
 	EX_IF_LatchType EX_IF_Latch;
 	boolean conflict = false;

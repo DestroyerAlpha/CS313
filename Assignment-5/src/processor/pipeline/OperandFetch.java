@@ -277,7 +277,8 @@ public class OperandFetch {
 				OF_EX_Latch.setEX_enable(true);
 				containingProcessor.getIFUnit().IF_EnableLatch.setIF_enable(true);
 			} else {
-				Statistics.datahaz++;
+				if((conflict && containingProcessor.getEXUnit().OF_EX_Latch.isEX_enable()) || (conflict && containingProcessor.getMAUnit().EX_MA_Latch.isMA_enable()) || (conflict && containingProcessor.getRWUnit().MA_RW_Latch.isRW_enable())) 
+					Statistics.datahaz++;
 				containingProcessor.getIFUnit().IF_EnableLatch.setIF_enable(false);
 
 			}

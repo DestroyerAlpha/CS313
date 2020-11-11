@@ -9,7 +9,7 @@ import generic.Statistics;
 import processor.Clock;
 import processor.Processor;
 
-public class Execute {
+public class Execute implements Element{
 	Processor containingProcessor;
 	OF_EX_LatchType OF_EX_Latch;
 	EX_MA_LatchType EX_MA_Latch;

@@ -1,7 +1,16 @@
 package processor.memorysystem;
-
-public class MainMemory {
+import generic.Element;
+import generic.Event;
+import generic.Event.EventType;
+import generic.MemoryReadEvent;
+import generic.MemoryResponseEvent;
+import generic.MemoryWriteEvent;
+import generic.Simulator;
+import processor.Clock;
+import processor.pipeline.MemoryAccess;
+public class MainMemory implements Element{
 	int[] memory;
+	boolean ismain_busy;
 	
 	public MainMemory()
 	{
@@ -31,5 +40,30 @@ public class MainMemory {
 		}
 		sb.append("\n");
 		return sb.toString();
+	}
+
+	@Override
+	public void handleEvent(Event e) {
+		// TODO Auto-generated method stub
+		if ( e.getEventType ( ) == EventType.MemoryRead )
+		{
+			MemoryReadEvent event = ( MemoryReadEvent ) e ;
+			Simulator. getEventQueue().addEvent(
+			new MemoryResponseEvent (
+			Clock.getCurrentTime () ,
+			this ,
+			event.getRequestingElement ( ) ,
+			getWord (event.getAddressToReadFrom()))) ;
+		}
+		else if(e.getEventType ( ) == EventType.MemoryWrite) {
+			//System.out.println("LLLLEVEVVERRE");
+			MemoryWriteEvent event = ( MemoryWriteEvent ) e ;
+			//event.getRequestingElement().EX_MA_Latch.setMA_busy(false);
+			((MemoryAccess)event.getRequestingElement()).EX_MA_Latch.setMA_busy(false);
+			((MemoryAccess)event.getRequestingElement()).MA_RW_Latch.setRW_enable(true);
+
+			setWord(event.getAddressToWriteTo(),event.getValue());
+			
+		}
 	}
 }
