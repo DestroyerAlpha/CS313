@@ -18,8 +18,9 @@ public class Statistics {
 		{
 			PrintWriter writer = new PrintWriter(statFile);
 			// TODO add code here to print statistics in the output file
-			// writer.println("Number of instructions executed = " + numberOfInstructions);
+			writer.println("Number of instructions executed = " + numberOfInstructions);
 			writer.println("Number of cycles taken = " + numberOfCycles);
+			writer.println("Throughput = " + (float)numberOfInstructions/numberOfCycles );
 			writer.println("Number of times the OF stage needed to stall because of a datahazard = " + datahaz);
 			writer.println("Number of times an instruction on a wrong branch path entered the pipeline = " + controlhaz);
 			

@@ -5,6 +5,7 @@ import configuration.Configuration;
 import generic.MemoryReadEvent;
 import generic.MemoryResponseEvent;
 import generic.Simulator;
+import generic.Statistics;
 import processor.Clock;
 import generic.Element;
 import generic.Event;
@@ -52,6 +53,7 @@ public class InstructionFetch implements Element{
 							containingProcessor.getRegisterFile().getProgramCounter()));
 			IF_EnableLatch.setIF_busy(true);
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
+			Statistics.setNumberOfInstructions(Statistics.numberOfInstructions+1);
 		}
 	}
 

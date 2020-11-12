@@ -1,4 +1,5 @@
-Number of instructions executed = 365
-Number of cycles taken = 571
-Number of times the OF stage needed to stall because of a datahazard = 114
-Number of times an instruction on a wrong branch path entered the pipeline = 168
+Number of instructions executed = 6
+Number of cycles taken = 249
+Throughput = 0.024096385
+Number of times the OF stage needed to stall because of a datahazard = 4
+Number of times an instruction on a wrong branch path entered the pipeline = 0

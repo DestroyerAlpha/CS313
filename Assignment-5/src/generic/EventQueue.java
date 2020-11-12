@@ -9,7 +9,7 @@ public class EventQueue {
 
 	PriorityQueue<Event> queue;
 
-	public void deleteeventqueue(long Clock) {
+	public void DeleteEvent(long Clock) {
 		Iterator<Event> itr = queue.iterator();
 		Event e;
 		while (itr.hasNext()) {

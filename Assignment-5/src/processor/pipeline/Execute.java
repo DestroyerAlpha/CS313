@@ -191,7 +191,7 @@ public class Execute implements Element{
 					containingProcessor.getIFUnit().IF_EnableLatch.IF_enable = false;
 					containingProcessor.getIFUnit().isEND = false;
 					OF_EX_Latch.setEX_enable(false);
-					Simulator.getEventQueue().deleteeventqueue(Clock.getCurrentTime());
+					Simulator.getEventQueue().DeleteEvent(Clock.getCurrentTime());
 					break;
 				default:
 					EX_MA_Latch.setrd(OF_EX_Latch.getrd());
