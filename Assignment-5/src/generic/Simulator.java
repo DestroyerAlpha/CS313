@@ -1,7 +1,6 @@
 package generic;
 
 import java.io.*;
-import java.util.*;
 
 import processor.Clock;
 import processor.Processor;
@@ -56,13 +55,14 @@ public class Simulator {
 
 	public static void simulate() {
 		while (simulationComplete == false) {
+			Clock.incrementClock();
 			processor.getRWUnit().performRW();
 			processor.getMAUnit().performMA();
 			processor.getEXUnit().performEX();
 			eventQueue.processEvents();
 			processor.getOFUnit().performOF();
 			processor.getIFUnit().performIF();
-			Clock.incrementClock();
+			
 			cycle++;
 		}
 

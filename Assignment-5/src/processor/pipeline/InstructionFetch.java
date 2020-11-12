@@ -1,6 +1,5 @@
 package processor.pipeline;
 
-import generic.Statistics;
 import processor.Processor;
 import configuration.Configuration;
 import generic.MemoryReadEvent;
@@ -14,9 +13,9 @@ public class InstructionFetch implements Element{
 
 	Processor containingProcessor;
 	public IF_EnableLatchType IF_EnableLatch;
-	IF_OF_LatchType IF_OF_Latch;
+	public IF_OF_LatchType IF_OF_Latch;
 	EX_IF_LatchType EX_IF_Latch;
-	boolean conflict = false;
+	// boolean conflict = false;
 	boolean isEND = false;
 
 	public InstructionFetch(Processor containingProcessor, IF_EnableLatchType iF_EnableLatch,

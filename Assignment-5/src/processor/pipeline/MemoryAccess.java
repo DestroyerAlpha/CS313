@@ -43,7 +43,7 @@ public class MemoryAccess implements Element{
 			}
 			int op2 = EX_MA_Latch.getop2();
 			int Final_result = EX_MA_Latch.getFinal_Result();
-			int load_result = 0;
+			// int load_result = 0;
 
 			int instruction = EX_MA_Latch.getInstruction();
 			cu.setInstruction(instruction);
@@ -59,14 +59,17 @@ public class MemoryAccess implements Element{
 								containingProcessor.getMainMemory(), Final_result, op2));
 				EX_MA_Latch.setMA_busy(true);
 			} else if (cu.opcode.equals("10110")) {
+				// System.out.println("MA Event");
+				
 				Simulator.getEventQueue()
 						.addEvent(new MemoryReadEvent(Clock.getCurrentTime() + Configuration.mainMemoryLatency, this,
 								containingProcessor.getMainMemory(), Final_result));
 				EX_MA_Latch.setMA_busy(true);
 			} else {
 				MA_RW_Latch.setFinal_result(Final_result);
+				setEnableDisable();
 			}
-			setEnableDisable();
+			MA_RW_Latch.setrd(EX_MA_Latch.getrd());
 		} else {
 			performOperations();
 		}
@@ -77,6 +80,8 @@ public class MemoryAccess implements Element{
 		// TODO Auto-generated method stub
 		MemoryResponseEvent event = (MemoryResponseEvent) e;
 		MA_RW_Latch.setLoadResult(event.getValue());
+		// System.out.println(event.getValue());
+		// System.out.println("OVER MA");
 		EX_MA_Latch.setMA_busy(false);
 		MA_RW_Latch.setRW_enable(true);
 		EX_MA_Latch.setMA_enable(false);

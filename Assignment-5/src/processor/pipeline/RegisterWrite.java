@@ -60,6 +60,8 @@ public class RegisterWrite {
 						break;
 				}
 				int rd = MA_RW_Latch.getrd();
+				// System.out.println("RD");
+				// System.out.println(rd);
 				if(cu.isRegisterWriteBack())
 				{
 					containingProcessor.getRegisterFile().setValue(rd, result);

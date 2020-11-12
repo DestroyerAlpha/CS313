@@ -110,11 +110,15 @@ public class Execute implements Element{
 			if(cu.isimm() || opcode.equals("11101")){
 				setop1(op1);
 				setop2(imm);
+				// System.out.println("IS IMM in EX");
+				// System.out.println(opcode);
+				// System.out.println(op1);
+				// System.out.println(imm);
+				// System.out.println("OVER");
 				Final_result=eval(opcode);
 				if(opcode.equals("00111")) containingProcessor.getRegisterFile().setValue(31, op1%imm);
 				EX_MA_Latch.setop2(op2);
 				EX_MA_Latch.setFinal_Result(Final_result);
-				EX_MA_Latch.setMA_enable(true);
 				event_scheduler(opcode,this);
 				
 			}
@@ -124,7 +128,6 @@ public class Execute implements Element{
 				Final_result=eval(opcode);
 				if(opcode.equals("00110")) containingProcessor.getRegisterFile().setValue(31, op1%op2);
 				EX_MA_Latch.setFinal_Result(Final_result);
-				EX_MA_Latch.setMA_enable(true);
 				event_scheduler(opcode,this);
 
 			}
@@ -187,13 +190,13 @@ public class Execute implements Element{
 					containingProcessor.getOFUnit().isEND = false;
 					containingProcessor.getIFUnit().IF_EnableLatch.IF_enable = false;
 					containingProcessor.getIFUnit().isEND = false;
+					OF_EX_Latch.setEX_enable(false);
 					Simulator.getEventQueue().deleteeventqueue(Clock.getCurrentTime());
 					break;
 				default:
 					EX_MA_Latch.setrd(OF_EX_Latch.getrd());
 					break;
 			}
-			OF_EX_Latch.setEX_enable(false);
 		}
 		else {
 			cu.opcode="";

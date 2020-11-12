@@ -26,7 +26,12 @@ public class MainMemory implements Element{
 	{
 		memory[address] = value;
 	}
-	
+	public void setmainbusy(boolean m) {
+		ismain_busy=m;
+	}
+	public boolean ismainbusy() {
+		return ismain_busy;
+	}
 	public String getContentsAsString(int startingAddress, int endingAddress)
 	{
 		if(startingAddress == endingAddress)
