@@ -18,6 +18,20 @@ public class Execute{
 		this.EX_IF_Latch = eX_IF_Latch;
 	}
 	
+	public void setToggle() {
+		containingProcessor.getIF_OF().setOF_enable(false);
+		containingProcessor.getIF_OF().setRdRW(containingProcessor.getIF_OF().getRdEX());
+		containingProcessor.getIF_OF().setx31RW(containingProcessor.getIF_OF().getx31EX());
+		containingProcessor.getIF_OF().setRdMA(-2);
+		containingProcessor.getIF_OF().setx31MA(-2);
+		containingProcessor.getIF_OF().setRdEX(-2);
+		containingProcessor.getIF_OF().setx31EX(-2);
+		containingProcessor.getOF_EX().setEX_enable(false);
+		containingProcessor.setIF_Flag(true);
+		containingProcessor.setControlHazardFlag(true);
+		containingProcessor.setControlHazards(containingProcessor.getControlHazards() + 1);
+	}
+
 	public void performEX()
 	{
 		//TODO
@@ -42,14 +56,10 @@ public class Execute{
 			int aluresult = -1;
 			long AR = 0;
 			int remainder = -1;
-			
-//			System.out.println("Opcode in Execute Block: " + opcode);
-			
 			//add
 			if (opcode == 0){
 				AR = (long) op1 + (long) op2;
 				String s = Long.toBinaryString(AR);
-//				System.out.println(s);
 				while (s.length() < 63) {
 					s = "0" + s;
 				}
@@ -62,7 +72,6 @@ public class Execute{
 			else if (opcode == 1){
 				AR = (long) op1 + (long) imm;
 				String s = Long.toBinaryString(AR);
-//				System.out.println(s);
 				while (s.length() < 63) {
 					s = "0" + s;
 				}
@@ -84,7 +93,6 @@ public class Execute{
 				//aluresult = op1 * op2;
 				AR = (long) op1 * (long) op2;
 				String s = Long.toBinaryString(AR);
-//				System.out.println(s);
 				while (s.length() < 63) {
 					s = "0" + s;
 				}
@@ -97,7 +105,6 @@ public class Execute{
 			else if (opcode == 5){
 				AR = (long) op1 * (long) imm;
 				String s = Long.toBinaryString(AR);
-//				System.out.println(s);
 				while (s.length() < 63) {
 					s = "0" + s;
 				}
@@ -113,7 +120,6 @@ public class Execute{
 			}
 			//divi
 			else if (opcode == 7){
-				System.out.println("DIVI");
 				aluresult = op1 / imm;
 				remainder = op1 % imm;
 			}
@@ -183,7 +189,6 @@ public class Execute{
 				while (s.length() < 32) {
 					s = "0" + s;
 				}
-//				System.out.println(s.substring(s.length() - op2));
 				remainder = Integer.parseUnsignedInt(s.substring(s.length() - op2));
 				aluresult = op1>>op2;			
 			}
@@ -202,7 +207,6 @@ public class Execute{
 				while (s.length() < 32) {
 					s = "0" + s;
 				}
-//				System.out.println(s.substring(s.length() - op2));
 				remainder = Integer.parseUnsignedInt(s.substring(s.length() - op2));
 				aluresult = op1>>>op2;			
 			}
@@ -221,13 +225,11 @@ public class Execute{
 			}
 			//store
 			else if (opcode == 23){
-//				System.out.println("op2: " + op2 + "; imm: " + imm);
 				aluresult = op2 + imm;			
 			}
 			//jump
 			else if (opcode == 24){
 				int PC = containingProcessor.getRegisterFile().getProgramCounter();
-//				System.out.println((int) branchTarget);
 				if(containingProcessor.getIF_Enable().isIF_busy())
 				{
 					containingProcessor.getRegisterFile().setProgramCounter((int) (PC + branchTarget - 2)); //update PC	
@@ -236,27 +238,13 @@ public class Execute{
 				{
 					containingProcessor.getRegisterFile().setProgramCounter((int) (PC + branchTarget - 3)); //update PC	
 				}
-//				System.out.println("PC: " + ((int) PC + branchTarget - 2));
-				containingProcessor.getIF_OF().setOF_enable(false);
-				containingProcessor.getIF_OF().setRdRW(containingProcessor.getIF_OF().getRdEX());
-				containingProcessor.getIF_OF().setx31RW(containingProcessor.getIF_OF().getx31EX());
-				containingProcessor.getIF_OF().setRdMA(-2);
-				containingProcessor.getIF_OF().setx31MA(-2);
-				containingProcessor.getIF_OF().setRdEX(-2);
-				containingProcessor.getIF_OF().setx31EX(-2);
-				containingProcessor.getOF_EX().setEX_enable(false);
-//				containingProcessor.getIF_Enable().setIF_enable(false);
-				containingProcessor.setIF_Flag(true);				
-				containingProcessor.setControlHazardFlag(true);
-				containingProcessor.setControlHazards(containingProcessor.getControlHazards() + 1);
-//				System.out.println("Control Hazard Here. ");
+				setToggle();
 			}
 			//beq
 			else if (opcode == 25){
 				if (op1==op2) {
 					int PC = containingProcessor.getRegisterFile().getProgramCounter(); //update PC			
 					PC = PC + imm - 2;
-//					System.out.println("PC: " + PC);
 					if(containingProcessor.getIF_Enable().isIF_busy())
 					{
 						containingProcessor.getRegisterFile().setProgramCounter(PC); //update PC			
@@ -265,20 +253,7 @@ public class Execute{
 					{
 						containingProcessor.getRegisterFile().setProgramCounter(PC - 1); //update PC			
 					}
-//					containingProcessor.getRegisterFile().setProgramCounter(PC); //update PC			
-					containingProcessor.getIF_OF().setOF_enable(false);
-					containingProcessor.getIF_OF().setRdRW(containingProcessor.getIF_OF().getRdEX());
-					containingProcessor.getIF_OF().setx31RW(containingProcessor.getIF_OF().getx31EX());
-					containingProcessor.getIF_OF().setRdMA(-2);
-					containingProcessor.getIF_OF().setx31MA(-2);
-					containingProcessor.getIF_OF().setRdEX(-2);
-					containingProcessor.getIF_OF().setx31EX(-2);
-					containingProcessor.getOF_EX().setEX_enable(false);
-//					containingProcessor.getIF_Enable().setIF_enable(false);
-					containingProcessor.setIF_Flag(true);
-					containingProcessor.setControlHazardFlag(true);
-					containingProcessor.setControlHazards(containingProcessor.getControlHazards() + 1);
-//					System.out.println("Control Hazard Here. ");
+					setToggle();
 				}
 			}
 			//bne
@@ -286,7 +261,6 @@ public class Execute{
 				if (op1!=op2) {
 					int PC = containingProcessor.getRegisterFile().getProgramCounter(); //update PC			
 					PC = PC + imm - 2;
-//					System.out.println("PC: " + PC);
 					if(containingProcessor.getIF_Enable().isIF_busy())
 					{
 						containingProcessor.getRegisterFile().setProgramCounter(PC); //update PC			
@@ -295,30 +269,14 @@ public class Execute{
 					{
 						containingProcessor.getRegisterFile().setProgramCounter(PC - 1); //update PC			
 					}
-//					containingProcessor.getRegisterFile().setProgramCounter(PC); //update PC			
-					containingProcessor.getIF_OF().setOF_enable(false);
-					containingProcessor.getIF_OF().setRdRW(containingProcessor.getIF_OF().getRdEX());
-					containingProcessor.getIF_OF().setx31RW(containingProcessor.getIF_OF().getx31EX());
-					containingProcessor.getIF_OF().setRdMA(-2);
-					containingProcessor.getIF_OF().setx31MA(-2);
-					containingProcessor.getIF_OF().setRdEX(-2);
-					containingProcessor.getIF_OF().setx31EX(-2);
-					containingProcessor.getOF_EX().setEX_enable(false);
-//					containingProcessor.getIF_Enable().setIF_enable(false);
-					containingProcessor.setIF_Flag(true);
-					containingProcessor.setControlHazardFlag(true);
-					containingProcessor.setControlHazards(containingProcessor.getControlHazards() + 1);
-//					System.out.println("Control Hazard Here. ");
+					setToggle();
 				}			
 			}
 			//blt
 			else if (opcode == 27){
 				if (op1<op2) {
-					System.out.println("BLT");
 					int PC = containingProcessor.getRegisterFile().getProgramCounter(); //update PC			
 					PC = PC + imm - 2;
-					System.out.println("PC (What?): " + PC);
-					System.out.println("Immediate: " + imm);
 					if(containingProcessor.getIF_Enable().isIF_busy()) //  || Configuration.mainMemoryLatency == 1
 					{
 						containingProcessor.getRegisterFile().setProgramCounter(PC); //update PC			
@@ -327,30 +285,14 @@ public class Execute{
 					{
 						containingProcessor.getRegisterFile().setProgramCounter(PC - 1); //update PC			
 					}
-					containingProcessor.getIF_OF().setOF_enable(false);
-					containingProcessor.getIF_OF().setRdRW(containingProcessor.getIF_OF().getRdEX());
-					containingProcessor.getIF_OF().setx31RW(containingProcessor.getIF_OF().getx31EX());
-					containingProcessor.getIF_OF().setRdMA(-2);
-					containingProcessor.getIF_OF().setx31MA(-2);
-					containingProcessor.getIF_OF().setRdEX(-2);
-					containingProcessor.getIF_OF().setx31EX(-2);
-					containingProcessor.getOF_EX().setEX_enable(false);
-//					containingProcessor.getIF_Enable().setIF_enable(false);
-					containingProcessor.setIF_Flag(true);
-					containingProcessor.setControlHazardFlag(true);
-					containingProcessor.setControlHazards(containingProcessor.getControlHazards() + 1);
-//					System.out.println("Control Hazard Here. ");
+					setToggle();
 				}	
 			}
 			//bgt
 			else if (opcode == 28){
 				if (op1>op2) {
-					System.out.println("BGT");
 					int PC = containingProcessor.getRegisterFile().getProgramCounter(); //update PC			
 					PC = PC + imm - 2;
-					System.out.println("PC (What?): " + PC);
-					System.out.println("Immediate: " + imm);
-					System.out.println("IF Busy???: " + containingProcessor.getIF_Enable().isIF_busy());
 					if(containingProcessor.getIF_Enable().isIF_busy()|| Configuration.mainMemoryLatency > 3) //  
 					{
 						containingProcessor.getRegisterFile().setProgramCounter(PC); //update PC			
@@ -359,31 +301,14 @@ public class Execute{
 					{
 						containingProcessor.getRegisterFile().setProgramCounter(PC - 1); //update PC			
 					}
-//					containingProcessor.getRegisterFile().setProgramCounter(PC); //update PC			
-					containingProcessor.getIF_OF().setOF_enable(false);
-					containingProcessor.getIF_OF().setRdRW(containingProcessor.getIF_OF().getRdEX());
-					containingProcessor.getIF_OF().setx31RW(containingProcessor.getIF_OF().getx31EX());
-					containingProcessor.getIF_OF().setRdMA(-2);
-					containingProcessor.getIF_OF().setx31MA(-2);
-					containingProcessor.getIF_OF().setRdEX(-2);
-					containingProcessor.getIF_OF().setx31EX(-2);
-					containingProcessor.getOF_EX().setEX_enable(false);
-//					containingProcessor.getIF_Enable().setIF_enable(false);
-					containingProcessor.setIF_Flag(true);
-					containingProcessor.setControlHazardFlag(true);
-					containingProcessor.setControlHazards(containingProcessor.getControlHazards() + 1);
-//					System.out.println("Control Hazard Here. ");
+					setToggle();
 				}	
 			}
 			else if (opcode == 29) {
-//				Simulator.setSimulationComplete(true);
-				System.out.println("End");
 				containingProcessor.getRegisterFile().setProgramCounter(containingProcessor.getRegisterFile().getProgramCounter() - 1);
 				containingProcessor.getRegisterFile().setLock(true);
 				containingProcessor.setControlHazards(containingProcessor.getControlHazards() * 2);
 				containingProcessor.setHazardLock(true);
-//				System.out.println("Data Hazards: " + containingProcessor.getDataHazards());
-//				System.out.println("Control Hazards: " + containingProcessor.getControlHazards());				
 			}
 			EX_MA_Latch.setALUResult(aluresult);
 			EX_MA_Latch.setop1(op1);
@@ -391,19 +316,6 @@ public class Execute{
 			EX_MA_Latch.setrd(rd);
 			EX_MA_Latch.setreg2(reg2);
 			EX_MA_Latch.setremainder(remainder);
-
-//			System.out.println(EX_MA_Latch.getALUResult());
-//			System.out.println(EX_MA_Latch.getremainder());
-			
-			// In case of a jump / branch (control hazard) instruction, we have to create a reset function 
-			// which either resets the values of the latches, or stops OF and EX from working and let IF work
-			// again so that it overwrites the values of IF_OF_Latch and then enable OF also so that it
-			// overwrites the values of OF_EX_Latch i.e. control hazard avoided.
-			
-			// If the instruction does branch, then the opening 3 phases are set to false with the setting
-			// such that the IF_Latch becomes true immediately after that cycle is over (because it happens
-			// simultaneously in real life, but not here).
-			
 			OF_EX_Latch.setEX_enable(false);
 			EX_MA_Latch.setMA_enable(true);
 		}

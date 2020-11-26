@@ -37,10 +37,6 @@ public class InstructionFetch implements Element{
 			if(containingProcessor.getControlHazardFlag())
 				containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
 			currentPC = containingProcessor.getRegisterFile().getProgramCounter();
-//			int newInstruction = containingProcessor.getMainMemory().getWord(currentPC);
-//			IF_OF_Latch.setInstruction(newInstruction);
-//			IF_OF_Latch.setOF_enable(true);
-//			System.out.println("Add MemoryReadEvent to Queue -- IF");
 			Simulator.getEventQueue().addEvent(new MemoryReadEvent(Clock.getCurrentTime() + Configuration.L1i_latency, this, containingProcessor.getL1iCache(), currentPC));
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);
 			IF_EnableLatch.setIF_busy(true);
@@ -52,7 +48,6 @@ public class InstructionFetch implements Element{
 	public void handleEvent(Event e) {
 		// TODO Auto-generated method stub
 		if (IF_OF_Latch.isOF_busy()) { 
-//			System.out.println("Here");
 			e.setEventTime(Clock.getCurrentTime() + 1);
 			Simulator.getEventQueue().addEvent(e);
 		}
@@ -60,32 +55,18 @@ public class InstructionFetch implements Element{
 			MemoryResponseEvent event = (MemoryResponseEvent) e;
 			if ((containingProcessor.getControlHazardFlag() == false) || (Configuration.mainMemoryLatency <= 1)) { //
 				if (containingProcessor.getControlHazardFlag() == false) {
-					System.out.print("Instruction set to this: ");
-					System.out.println(event.getValue());		
-					if (event.getValue() == -402653184) {
-						System.out.println("-----End Instruction Starts Here----");
-					}
 					IF_OF_Latch.setInstruction(event.getValue());
 					IF_OF_Latch.setOF_enable(true);
 				}
 				else {
-					System.out.println("hw=ere");
 					if (event.getValue() != -402653184) {
-						System.out.println("-----End Instruction Starts Here----");
-						System.out.print("Instruction set to this: ");
-						System.out.println(event.getValue());		
 						IF_OF_Latch.setInstruction(event.getValue());
 						IF_OF_Latch.setOF_enable(true);
 					}
 					containingProcessor.setControlHazardFlag(false);
-//					int currentPC = containingProcessor.getRegisterFile().getProgramCounter();
-//					Simulator.getEventQueue().addEvent(new MemoryReadEvent(Clock.getCurrentTime() + Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), currentPC));
-//					containingProcessor.getIF_Enable().setIF_enable(false);
 				}
 			}
 			else {
-				System.out.print("Instruction set to -1. This is what was: ");
-				System.out.println(event.getValue());
 				IF_OF_Latch.setInstruction(-1);
 				containingProcessor.setControlHazardFlag(false);
 			}

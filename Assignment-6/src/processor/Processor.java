@@ -1,8 +1,7 @@
 package processor;
 
 import configuration.Configuration;
-import processor.memorysystem.CacheLd;
-import processor.memorysystem.CacheLi;
+import processor.memorysystem.Cache;
 import processor.memorysystem.MainMemory;
 import processor.pipeline.EX_IF_LatchType;
 import processor.pipeline.EX_MA_LatchType;
@@ -35,8 +34,8 @@ public class Processor {
 	MemoryAccess MAUnit;
 	RegisterWrite RWUnit;
 	
-	CacheLi L1iCache;
-	CacheLd L1dCache;
+	Cache L1iCache;
+	Cache L1dCache;
 	
 	int DataHazards;
 	int ControlHazards;
@@ -63,9 +62,9 @@ public class Processor {
 		MAUnit = new MemoryAccess(this, EX_MA_Latch, MA_RW_Latch);
 		RWUnit = new RegisterWrite(this, MA_RW_Latch, IF_EnableLatch);
 		
-		L1iCache = new CacheLi(this, Configuration.L1i_numberOfLines);
-		L1dCache = new CacheLd(this, Configuration.L1d_numberOfLines);
-		
+		L1iCache = new Cache(this, Configuration.L1i_numberOfLines);
+		L1dCache = new Cache(this, Configuration.L1d_numberOfLines);
+
 		DataHazards = 0;
 		ControlHazards = 0;
 		HazardLock = false;
@@ -137,11 +136,11 @@ public class Processor {
 		return MA_RW_Latch;
 	}
 	
-	public CacheLi getL1iCache() {
+	public Cache getL1iCache() {
 		return L1iCache;
 	}
 	
-	public CacheLd getL1dCache() {
+	public Cache getL1dCache() {
 		return L1dCache;
 	}
 
@@ -160,11 +159,9 @@ public class Processor {
 	}
 	
 	public void setControlHazards(int ContHaz) {
-		System.out.println(ControlHazards);
 		if (HazardLock == false) {
 			this.ControlHazards = ContHaz;
 		}
-		System.out.println(ControlHazards);
 	}
 	
 	public boolean getHazardLock() {
@@ -188,9 +185,7 @@ public class Processor {
 	}
 	
 	public void setControlHazardFlag(boolean CF_Flag) {
-		System.out.println(ControlHazardFlag);
 		this.ControlHazardFlag = CF_Flag;
-		System.out.println(ControlHazardFlag);
 	}
 
 	public boolean getControlHazardFlag2() {

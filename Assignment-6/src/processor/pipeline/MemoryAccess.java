@@ -39,31 +39,19 @@ public class MemoryAccess implements Element{
 			int ldResult = -1;
 			int remainder = EX_MA_Latch.getremainder();
 			
-//			System.out.println("Opcode in MA Block: " + opcode);
 
 			// Load:
 			if (opcode == 22) {
-				// Address = ALUResult
-				// Register to be written into = op2
 				Simulator.getEventQueue().addEvent(new MemoryReadEvent(Clock.getCurrentTime() + Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), ALUResult));
-//				ldResult = containingProcessor.getMainMemory().getWord(ALUResult);
-//				System.out.println("Add MemoryReadEvent to Queue -- MA");
 				EX_MA_Latch.setMA_busy(true);
-				//containingProcessor.getRegisterFile().setValue(reg2, data);
 			}
 			// Store:
 			else if (opcode == 23) {
-				// Address = ALUResult
-				// Value to be written = op1
 				Simulator.getEventQueue().addEvent(new MemoryWriteEvent(Clock.getCurrentTime() + Configuration.mainMemoryLatency, this, containingProcessor.getMainMemory(), ALUResult, op1));
 				EX_MA_Latch.setMA_busy(true);
-//				System.out.println("Add MemoryWriteEvent to Queue -- MA");
-//				containingProcessor.getMainMemory().setWord(ALUResult, op1);
-//				System.out.println("Storing " + op1 + " at " + ALUResult);
 			}
 			
 			MA_RW_Latch.setALUResult(ALUResult);
-//			MA_RW_Latch.setldResult(ldResult);
 			MA_RW_Latch.setOpcode(opcode);
 			MA_RW_Latch.setreg2(reg2);
 			MA_RW_Latch.setrd(rd);
@@ -74,8 +62,6 @@ public class MemoryAccess implements Element{
 				MA_RW_Latch.setRW_enable(true);
 			}
 			
-//			EX_MA_Latch.setMA_enable(false);
-//			MA_RW_Latch.setRW_enable(true);
 		}
 	}
 
@@ -110,11 +96,9 @@ public class MemoryAccess implements Element{
 			}
 			containingProcessor.getOF_EX().setEX_busy(false);
 			containingProcessor.getOF_EX().setEX_enable(true);
-//			MA_RW_Latch.setInstruction(event.getValue());
 		}
 		else if (e.getEventType() == EventType.ExecutionComplete){
 			ExecutionCompleteEvent event = (ExecutionCompleteEvent) e;
-//			MA_RW_Latch.setldResult(event.getValue());
 			MA_RW_Latch.setRW_enable(true);
 			EX_MA_Latch.setMA_busy(false);
 			EX_MA_Latch.setMA_enable(false);
@@ -122,7 +106,6 @@ public class MemoryAccess implements Element{
 			containingProcessor.getIF_OF().setOF_busy(false);
 			containingProcessor.getIF_OF().setOF_enable(true);
 			containingProcessor.getOF_EX().setEX_enable(true);
-//			MA_RW_Latch.setInstruction(event.getValue());
 		}
 		
 	}

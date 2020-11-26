@@ -50,16 +50,10 @@ public class MainMemory implements Element {
 		// TODO Auto-generated method stub
 		if (e.getEventType() == EventType.MemoryRead) {
 			MemoryReadEvent event = (MemoryReadEvent) e;
-//			System.out.println("Add MemoryResponseEvent to Queue");	
-//			System.out.print("This is the response: ");
-//			System.out.println(getWord(event.getAddressToReadFrom()));
 			Simulator.getEventQueue().addEvent(new MemoryResponseEvent(Clock.getCurrentTime(), this, e.getRequestingElement(), getWord(event.getAddressToReadFrom())));
 		}
 		else if (e.getEventType() == EventType.MemoryWrite) {
 			MemoryWriteEvent event = (MemoryWriteEvent) e;
-//			System.out.println("Add ExecutionCompleteEvent to Queue");	
-//			System.out.print("This is the response: ");
-//			System.out.println(getWord(event.getAddressToWriteTo()));
 			memory[event.getAddressToWriteTo()] = event.getValue();
 			Simulator.getEventQueue().addEvent(new ExecutionCompleteEvent(Clock.getCurrentTime(), this, e.getRequestingElement()));
 		}

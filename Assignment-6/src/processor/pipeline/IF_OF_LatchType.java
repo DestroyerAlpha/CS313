@@ -27,7 +27,6 @@ public class IF_OF_LatchType {
 	}
 
 	public void setOF_enable(boolean oF_enable) {
-//		System.out.println("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tOF OFF");
 		OF_enable = oF_enable;
 	}
 	

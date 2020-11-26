@@ -25,12 +25,9 @@ public class Main {
 		Simulator.simulate();
 		
 		processor.printState(0, 20); // ((0, 0) refers to the range of main memory addresses we wish to print. this is an empty set.
-		//Hi?
 		Statistics.printStatistics(args[1]);
 		
 		System.out.println("Hash of the Processor State = "+getHashCode(processor.getRegisterFile(), processor.getMainMemory()));
-//		System.out.println("Data Hazards: " + processor.getDataHazards());
-//		System.out.println("Control Hazards: " + processor.getControlHazards());
 	}
 	
 	static int getHashCode(RegisterFile registerState, MainMemory memoryState) {
